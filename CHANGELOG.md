@@ -5,6 +5,26 @@ All notable changes to Git Scout will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-09-30
+
+### Added
+
+- **🆕 Automatic Repository Discovery**: New `git-scout init` command for automatic Git repository detection and configuration
+- **Smart Project Analysis**: Automatically extracts project descriptions from package.json and README files
+- **Flexible Scanning**: Supports both auto-discovery and custom directory scanning
+- **Interactive Setup**: User-friendly wizard for selecting repositories and configuration options
+- **Multiple Storage Options**: Choose between global and local configuration storage
+
+### Enhanced
+
+- **Improved Setup Experience**: Updated setup script to use the new init command
+- **Better Documentation**: Enhanced README and INSTALLATION guides with init command examples
+- **Streamlined Workflow**: Reduced manual configuration requirements for new users
+
+### Commands
+
+- `git-scout init`: Auto-discover and configure Git repositories with interactive selection
+
 ## [1.0.0] - 2025-09-30
 
 ### Added

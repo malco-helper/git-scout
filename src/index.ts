@@ -6,6 +6,7 @@ import { ProjectsCommand } from "./commands/projects";
 import { BranchesCommand } from "./commands/branches";
 import { TodayCommand } from "./commands/today";
 import { StatsCommand } from "./commands/stats";
+import { InitCommand } from "./commands/init";
 import { TableRenderer } from "./ui/table";
 
 const program = new Command();
@@ -16,7 +17,7 @@ program
   .description(
     "A CLI tool for managing and analyzing multiple Git repositories with advanced statistics"
   )
-  .version("1.0.0");
+  .version("1.1.0");
 
 // Global error handler
 process.on("unhandledRejection", (error) => {
@@ -30,6 +31,21 @@ process.on("uncaughtException", (error) => {
   );
   process.exit(1);
 });
+
+// Init command
+program
+  .command("init")
+  .description("Initialize Git Scout with automatic repository discovery")
+  .option("-p, --scan-path <path>", "Custom path to scan for repositories")
+  .option("-g, --global", "Save configuration globally")
+  .action(async (options) => {
+    try {
+      await InitCommand.execute(options);
+    } catch (error) {
+      console.error(TableRenderer.renderError(`Init command failed: ${error}`));
+      process.exit(1);
+    }
+  });
 
 // Projects command
 program
@@ -118,6 +134,9 @@ program.on("--help", () => {
   console.log("");
   console.log(chalk.bold.underline("Examples:"));
   console.log(
+    "  $ git-scout init                                  # Auto-discover and configure repositories"
+  );
+  console.log(
     "  $ git-scout projects                              # List and select projects"
   );
   console.log(
@@ -153,6 +172,7 @@ program.action(() => {
   );
 
   console.log(chalk.bold("Available Commands:"));
+  console.log("  init      - Initialize with automatic repository discovery");
   console.log("  projects  - List and select projects");
   console.log("  branches  - Explore branches and commits");
   console.log("  today     - Today's activity summary");
@@ -160,7 +180,9 @@ program.action(() => {
   console.log("");
 
   console.log(chalk.bold("Quick Start:"));
-  console.log('  1. Run "git-scout projects" to configure your repositories');
+  console.log(
+    '  1. Run "git-scout init" to automatically find and configure repositories'
+  );
   console.log('  2. Use "git-scout today" to see today\'s activity');
   console.log('  3. Try "git-scout stats --since 7d" for weekly insights');
   console.log("");
@@ -175,7 +197,7 @@ program.on("command:*", (operands) => {
   console.error(TableRenderer.renderError(`Unknown command: ${operands[0]}`));
   console.log("");
   console.log("Available commands:");
-  console.log("  projects, branches, today, stats");
+  console.log("  init, projects, branches, today, stats");
   console.log("");
   console.log('Run "git-scout --help" for more information');
   process.exit(1);

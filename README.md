@@ -80,8 +80,8 @@ Git Scout requires a configuration file to define your Git projects. Create one 
 ### Quick Start
 
 ```bash
-# 1. Set up your projects
-git-scout projects
+# 1. Auto-discover and configure your Git repositories
+git-scout init
 
 # 2. View today's activity
 git-scout today
@@ -94,6 +94,37 @@ git-scout stats --since 7d
 ```
 
 ### Commands
+
+#### `git-scout init`
+
+**🆕 NEW!** Automatically discover and configure Git repositories on your system.
+
+```bash
+git-scout init [options]
+```
+
+**Options:**
+
+- `-p, --scan-path <path>`: Custom directory to scan for repositories
+- `-g, --global`: Save configuration globally (default: asks user)
+
+**Features:**
+
+- 🔍 **Safe Auto-discovery**: Scans development directories without triggering macOS permission requests
+- 📁 **Custom scanning**: Specify any directory to scan for Git repositories
+- 🎯 **Smart filtering**: Automatically detects valid Git repositories
+- 📝 **Repository analysis**: Extracts project descriptions from README/package.json
+- ⚡ **Quick setup**: No manual configuration needed
+- 🌍 **Flexible storage**: Choose between global or local configuration
+- 🛡️ **Privacy-focused**: Avoids sensitive directories (Photos, Music, etc.)
+
+**Examples:**
+
+```bash
+git-scout init                           # Auto-discover repositories
+git-scout init --scan-path ~/MyProjects # Scan specific directory
+git-scout init --global                 # Force global configuration
+```
 
 #### `git-scout projects`
 

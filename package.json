@@ -1,6 +1,6 @@
 {
   "name": "git-scout",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A CLI tool for managing and analyzing multiple Git repositories with advanced statistics",
   "main": "dist/index.js",
   "bin": {
