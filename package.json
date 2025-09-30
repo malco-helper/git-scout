@@ -29,16 +29,16 @@
     "git-analysis",
     "typescript"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "malcohepler",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/git-scout.git"
+    "url": "git+https://github.com/malcohepler/git-scout.git"
   },
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/git-scout/issues"
+    "url": "https://github.com/malcohepler/git-scout/issues"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/git-scout#readme",
+  "homepage": "https://github.com/malcohepler/git-scout#readme",
   "engines": {
     "node": ">=16.0.0"
   },
