@@ -77,15 +77,10 @@ runs:
           echo ""
           echo "You enabled post-comment but no GitHub token was provided."
           echo ""
-          echo "✅ Fix Option 1: Add github-token to your workflow:"
-          echo "  - uses: malcohelper/git-scout-action@v1"
-          echo "    with:"
-          echo "      github-token: \${{ secrets.GITHUB""_TOKEN }}"
+          echo "✅ Fix: Add github-token input with your GITHUB_TOKEN"
+          echo "   See: https://github.com/malcohelper/git-scout#usage"
           echo ""
-          echo "✅ Fix Option 2: Disable PR comments:"
-          echo "  - uses: malcohelper/git-scout-action@v1"
-          echo "    with:"
-          echo "      post-comment: false"
+          echo "   OR disable PR comments with: post-comment: false"
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           exit 1
@@ -243,7 +238,7 @@ runs:
 ### 📊 Repository Statistics
 
 | Metric | Value |
-|--------|-------|
+|:-------|------:|
 | Total Commits | ${stats.totalCommits || 0} |
 | Files Changed | ${stats.totalFiles || 0} |
 | Lines Added | +${stats.totalAdditions || 0} |
