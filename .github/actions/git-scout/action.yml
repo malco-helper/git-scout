@@ -80,7 +80,7 @@ runs:
           echo "✅ Fix Option 1: Add github-token to your workflow:"
           echo "  - uses: malcohelper/git-scout-action@v1"
           echo "    with:"
-          echo "      github-token: \${{ secrets.GITHUB_TOKEN }}"
+          echo "      github-token: \\\${{ secrets.GITHUB_TOKEN }}"
           echo ""
           echo "✅ Fix Option 2: Disable PR comments:"
           echo "  - uses: malcohelper/git-scout-action@v1"
@@ -237,7 +237,7 @@ runs:
           const qualityIcon = qualityPassed === 'true' ? '✅' : '❌';
           
           const comment = `## 🔍 Git Scout Analysis
-          
+
 **Quality Score**: ${qualityScore}/100 ${qualityIcon}
 
 ### 📊 Repository Statistics
