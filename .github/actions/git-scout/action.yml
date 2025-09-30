@@ -10,7 +10,7 @@ inputs:
   github-token:
     description: 'GitHub token (auto-provided, only required when posting comments or using GitHub API)'
     required: false
-    default: ${{ github.token }}
+    # Note: Cannot use default expressions in composite actions
   
   command:
     description: 'Git Scout command to run (e.g., "stats --since 7d")'
