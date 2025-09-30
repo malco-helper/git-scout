@@ -2,123 +2,67 @@
 
 A powerful CLI tool for managing and analyzing multiple Git repositories with advanced statistics and beautiful visualizations.
 
-## ✨ Features
+## ✨ Key Features
 
-- **Multi-Repository Management**: Configure and manage multiple Git projects from a single interface
-- **Interactive Branch Explorer**: Browse branches with detailed commit information and activity metrics
-- **Today's Activity Dashboard**: Get instant insights into today's development activity
-- **Comprehensive Statistics**: Generate detailed reports with author and file-level analytics
-- **Beautiful Tables & Colors**: ASCII tables with syntax highlighting and intuitive color coding
-- **Flexible Date Parsing**: Support for relative dates (7d, today, yesterday) and absolute dates
-- **JSON Export**: All commands support JSON output for integration with other tools
-- **macOS Optimized**: Built specifically for macOS with proper timezone handling
+- 🆕 **Auto-Discovery**: Automatically find and configure Git repositories with `git-scout init`
+- 📊 **Multi-Repository Management**: Track multiple Git projects from a single interface
+- 🌿 **Interactive Branch Explorer**: Browse branches with detailed commit information
+- 📈 **Today's Activity Dashboard**: Get instant insights into daily development activity
+- 📋 **Comprehensive Statistics**: Generate detailed reports with author and file-level analytics
+- 🎨 **Beautiful Tables & Colors**: ASCII tables with syntax highlighting and intuitive color coding
+- 📅 **Flexible Date Parsing**: Support for relative dates (7d, today, yesterday) and absolute dates
+- 📤 **JSON Export**: All commands support JSON output for integration with other tools
+- 🍎 **macOS Optimized**: Built specifically for macOS with proper timezone handling and safe scanning
+- 🛡️ **Privacy-Focused**: Avoids sensitive directories (Photos, Music, etc.) - no permission requests
 
-## 🚀 Installation
+## 🚀 Quick Installation & Setup
 
-### Global Installation (Recommended)
-
-```bash
-npm install -g git-scout
-```
-
-### Local Development
+### Step 1: Install Git Scout
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/your-username/git-scout.git
 cd git-scout
 
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Link for local development
-npm run link:local
-
-# Or run directly with ts-node
-npm run dev -- --help
+# Auto-install everything
+./scripts/setup.sh
 ```
 
-## 📋 Configuration
-
-Git Scout requires a configuration file to define your Git projects. Create one of these files:
-
-- **Global**: `~/.git-scout/config.json`
-- **Local**: `./git-scout.config.json` (in your current directory)
-
-### Sample Configuration
-
-```json
-{
-  "projects": [
-    {
-      "name": "App iOS",
-      "path": "/Users/yourname/Dev/app-ios"
-    },
-    {
-      "name": "Backend API",
-      "path": "/Users/yourname/Dev/backend-api"
-    },
-    {
-      "name": "RN Client",
-      "path": "/Users/yourname/Dev/rn-client"
-    }
-  ],
-  "defaultSinceDays": 1
-}
+**Or manual installation:**
+```bash
+npm install && npm run build && npm link
 ```
 
-### Configuration Options
-
-- `projects`: Array of project objects with `name` and `path`
-- `defaultSinceDays`: Default number of days to look back for statistics (default: 1)
-
-## 🎯 Usage
-
-### Quick Start
+### Step 2: Auto-Configure Your Repositories 🆕
 
 ```bash
-# 1. Auto-discover and configure your Git repositories
+# 🎯 ONE COMMAND TO RULE THEM ALL
 git-scout init
+```
 
-# 2. View today's activity
+**What this does:**
+- 🔍 Automatically scans for Git repositories in safe directories
+- 📝 Extracts project descriptions from package.json/README files
+- ⚡ Creates configuration instantly - no manual setup needed
+- 🛡️ Respects macOS privacy - no permission requests for Photos/Music/etc.
+
+### Step 3: Start Analyzing!
+
+```bash
+# View today's activity
 git-scout today
 
-# 3. Explore branches
+# Explore branches
 git-scout branches
 
-# 4. Generate comprehensive stats
+# Generate weekly statistics
 git-scout stats --since 7d
 ```
 
-### Commands
+## 🎯 Core Commands
 
-#### `git-scout init`
-
-**🆕 NEW!** Automatically discover and configure Git repositories on your system.
-
-```bash
-git-scout init [options]
-```
-
-**Options:**
-
-- `-p, --scan-path <path>`: Custom directory to scan for repositories
-- `-g, --global`: Save configuration globally (default: asks user)
-
-**Features:**
-
-- 🔍 **Safe Auto-discovery**: Scans development directories without triggering macOS permission requests
-- 📁 **Custom scanning**: Specify any directory to scan for Git repositories
-- 🎯 **Smart filtering**: Automatically detects valid Git repositories
-- 📝 **Repository analysis**: Extracts project descriptions from README/package.json
-- ⚡ **Quick setup**: No manual configuration needed
-- 🌍 **Flexible storage**: Choose between global or local configuration
-- 🛡️ **Privacy-focused**: Avoids sensitive directories (Photos, Music, etc.)
-
-**Examples:**
+### `git-scout init` - Auto Setup 🆕
+**The easiest way to get started!**
 
 ```bash
 git-scout init                           # Auto-discover repositories
@@ -126,301 +70,220 @@ git-scout init --scan-path ~/MyProjects # Scan specific directory
 git-scout init --global                 # Force global configuration
 ```
 
-#### `git-scout projects`
+**Safe Scanning:**
+- ✅ Scans: `~/Projects`, `~/Dev`, `~/Code`, `~/GitHub`, `~/Documents/Projects`
+- ❌ Avoids: Photos, Music, Movies, System directories (no permission requests!)
 
-List and select projects from your configuration. Validates that all paths are valid Git repositories.
-
+### `git-scout today` - Daily Activity
 ```bash
-git-scout projects [--json]
+git-scout today                          # Today's activity
+git-scout today --author alice           # Filter by author
+git-scout today --branch main            # Filter by branch
 ```
 
-**Options:**
-
-- `--json`: Output results in JSON format
-
-#### `git-scout branches`
-
-Explore branches and view detailed commit information.
-
+### `git-scout stats` - Comprehensive Analytics
 ```bash
-git-scout branches [options]
+git-scout stats --since 7d               # Weekly statistics
+git-scout stats --since "2025-09-01"     # Since specific date
+git-scout stats --author alice --json    # JSON output for specific author
 ```
 
-**Options:**
-
-- `-p, --project <name>`: Specific project to analyze
-- `-r, --remote`: Include remote branches
-- `-s, --since <date>`: Show commits since date
-- `--json`: Output results in JSON format
-
-**Examples:**
-
+### `git-scout branches` - Branch Explorer
 ```bash
-git-scout branches --project "Backend API"
-git-scout branches --since 7d --json
+git-scout branches                       # Interactive branch explorer
+git-scout branches --project "My App"    # Specific project
+git-scout branches --since 30d          # Show recent activity
 ```
 
-#### `git-scout today`
-
-Show today's development activity with detailed statistics.
-
+### `git-scout projects` - Project Management
 ```bash
-git-scout today [options]
+git-scout projects                       # List and select projects
+git-scout projects --json               # JSON output
 ```
 
-**Options:**
+## 📊 Sample Output
 
-- `-p, --project <name>`: Project to analyze
-- `-s, --since <date>`: Start date (default: today)
-- `-u, --until <date>`: End date (default: end of today)
-- `-a, --author <email|name>`: Filter by author
-- `-b, --branch <name>`: Filter by branch
-- `-l, --limit <number>`: Limit number of files shown
-- `--json`: Output results in JSON format
-
-**Examples:**
-
-```bash
-git-scout today --project "RN Client"
-git-scout today --author "alice@company.com"
-git-scout today --branch develop --limit 10
-```
-
-#### `git-scout stats`
-
-Generate comprehensive statistics for any time period.
-
-```bash
-git-scout stats [options]
-```
-
-**Options:**
-
-- `-p, --project <name>`: Project to analyze
-- `-s, --since <date>`: Start date (e.g., 7d, today, 2025-09-01)
-- `-u, --until <date>`: End date (default: now)
-- `-a, --author <email|name>`: Filter by author
-- `-b, --branch <name>`: Filter by branch
-- `-l, --limit <number>`: Limit number of files shown
-- `--json`: Output results in JSON format
-
-**Examples:**
-
-```bash
-git-scout stats --since 7d
-git-scout stats --since "2025-09-01" --until "2025-09-30"
-git-scout stats --author "alice@company.com" --json
-git-scout stats --branch main --limit 50
-```
-
-### Date Formats
-
-Git Scout supports flexible date parsing:
-
-- **Relative**: `today`, `yesterday`, `7d`, `30d`
-- **Specific Time**: `today 09:00`, `yesterday 18:30`
-- **Absolute**: `2025-09-29`, `2025-09-29T10:00:00`
-- **ISO Strings**: Full ISO 8601 format
-
-## 📊 Output Examples
-
-### Author Statistics Table
-
+### Author Statistics
 ```
 ┌─────────────────────────┬─────────┬───────┬────────┬────────┐
 │ AUTHOR                  │ COMMITS │ FILES │ +LINES │ -LINES │
 ├─────────────────────────┼─────────┼───────┼────────┼────────┤
 │ John Doe                │ 15      │ 23    │ +487   │ -123   │
 │ Jane Smith              │ 8       │ 12    │ +234   │ -67    │
-│ Bob Wilson              │ 5       │ 8     │ +156   │ -45    │
 └─────────────────────────┴─────────┴───────┴────────┴────────┘
 ```
 
-### File Statistics Table
-
-```
-┌──────────────────────────────────────────────────┬─────────┬────────┬────────┐
-│ FILE                                             │ COMMITS │ +LINES │ -LINES │
-├──────────────────────────────────────────────────┼─────────┼────────┼────────┤
-│ src/api/user.controller.ts                       │ 8       │ +180   │ -45    │
-│ ios/AppDelegate.m                                │ 3       │ +90    │ -10    │
-│ src/components/UserProfile.tsx                   │ 5       │ +67    │ -23    │
-└──────────────────────────────────────────────────┴─────────┴────────┴────────┘
-```
-
 ### Branch Information
-
 ```
 🌿 Branch: develop
 
 Latest commit: a1b2c3d
-Author: John Doe
+Author: John Doe  
 Date: 09/30/2025 14:30
 Message: Add user authentication feature
 Recent commits: 12
 ```
 
-## 🧪 Testing
+## 📅 Flexible Date Formats
 
-Run the test suite:
+Git Scout supports natural date expressions:
 
+- **Relative**: `today`, `yesterday`, `7d`, `30d`
+- **Specific**: `today 09:00`, `2025-09-29`
+- **ISO Format**: `2025-09-29T10:00:00`
+
+## ⚙️ Configuration
+
+### Automatic (Recommended)
 ```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run with coverage
-npm run test -- --coverage
+git-scout init  # One command setup!
 ```
 
-### Test Structure
+### Manual Configuration
+Create `~/.git-scout/config.json`:
+```json
+{
+  "projects": [
+    {
+      "name": "My App",
+      "path": "/Users/yourname/Dev/my-app"
+    }
+  ],
+  "defaultSinceDays": 1
+}
+```
 
-- `src/utils/__tests__/`: Date parsing utilities tests
-- `src/git/__tests__/`: Git service and parsing tests
-- Unit tests for core functionality with mocked Git commands
+## 🔧 Advanced Usage
 
-## 🔧 Development
+### JSON Integration
+```bash
+# Export data for other tools
+git-scout stats --since 7d --json > weekly-report.json
+git-scout today --json | jq '.stats.totalCommits'
+```
 
-### Prerequisites
+### Filtering & Analysis
+```bash
+# Team productivity analysis
+git-scout stats --since 30d --author "team@company.com"
 
-- Node.js >= 16.0.0
-- Git (for analyzing repositories)
-- TypeScript
-- macOS (primary target platform)
+# Branch comparison
+git-scout branches --project "Backend" --since 7d
 
-### Development Workflow
+# File change tracking
+git-scout stats --since 7d --limit 50
+```
+
+### Multiple Projects Workflow
+```bash
+# 1. Configure multiple projects
+git-scout init
+
+# 2. Select projects interactively
+git-scout projects
+
+# 3. Analyze across selected projects
+git-scout today
+```
+
+## 🐛 Troubleshooting
+
+### Command not found
+```bash
+npm link  # Re-link the package
+```
+
+### No repositories found
+```bash
+git-scout init --scan-path ~/your-dev-folder  # Custom scan path
+```
+
+### Permission issues
+```bash
+chmod +x scripts/setup.sh  # Make setup script executable
+```
+
+### Config issues
+```bash
+rm ~/.git-scout/config.json && git-scout init  # Reset and reconfigure
+```
+
+## 🗑️ Uninstallation
 
 ```bash
-# Install dependencies
+# Remove global command
+npm unlink -g git-scout
+
+# Remove configuration (optional)
+rm -rf ~/.git-scout
+
+# Remove source code
+rm -rf /path/to/git-scout
+```
+
+## 🧪 Development & Testing
+
+### Prerequisites
+- Node.js >= 16.0.0
+- Git
+- macOS (primary target)
+
+### Development Setup
+```bash
+git clone <repository-url>
+cd git-scout
 npm install
-
-# Start development with auto-reload
-npm run dev -- projects
-
-# Build for production
-npm run build
-
-# Lint code
-npm run lint
-
-# Clean build artifacts
-npm run clean
+npm run dev -- --help    # Development mode
+npm test                 # Run tests
+npm run build            # Production build
 ```
 
 ### Architecture
-
 ```
 src/
-├── commands/           # CLI command implementations
-│   ├── projects.ts     # Project management
-│   ├── branches.ts     # Branch exploration
-│   ├── today.ts        # Today's activity
-│   └── stats.ts        # Comprehensive statistics
-├── git/                # Git integration
-│   └── gitService.ts   # Git command execution and parsing
-├── ui/                 # User interface utilities
-│   └── table.ts        # Table rendering and formatting
-├── utils/              # Utility functions
-│   └── date.ts         # Date parsing and formatting
-├── config.ts           # Configuration management
-├── types.ts            # TypeScript type definitions
-└── index.ts            # Main CLI entry point
+├── commands/           # CLI commands (init, projects, branches, today, stats)
+├── git/               # Git integration and parsing
+├── ui/                # Table rendering and formatting
+├── utils/             # Date parsing and utilities
+├── config.ts          # Configuration management
+├── types.ts           # TypeScript definitions
+└── index.ts           # Main CLI entry point
 ```
-
-## 🎨 Features in Detail
-
-### Interactive Project Selection
-
-- Checkbox-style multi-project selection
-- Automatic Git repository validation
-- Path verification and error reporting
-
-### Advanced Date Parsing
-
-- Natural language dates (today, yesterday)
-- Relative periods (7d, 30d)
-- Specific timestamps with timezone support
-- Range validation and error handling
-
-### Comprehensive Git Integration
-
-- Direct Git CLI execution for maximum compatibility
-- Efficient parsing of git log, numstat, and branch data
-- Support for large repositories with streaming
-- Proper handling of merge commits and complex histories
-
-### Beautiful Terminal UI
-
-- Color-coded output with semantic meaning
-- ASCII tables with proper alignment
-- Progress indicators and loading states
-- Error messages with helpful suggestions
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Config file not found**
-
-```bash
-# Create global config directory
-mkdir -p ~/.git-scout
-# Copy sample config and edit
-cp git-scout.config.sample.json ~/.git-scout/config.json
-```
-
-**Project path is not a Git repository**
-
-- Ensure the path points to a directory containing a `.git` folder
-- Verify you have read access to the directory
-
-**No commits found**
-
-- Check if the date range includes any commits
-- Verify branch names and author filters
-- Try expanding the time range with `--since 30d`
-
-**Permission denied errors**
-
-- Ensure Git is installed and accessible in PATH
-- Check repository permissions
-- Verify you can run `git status` in the project directory
-
-### Debug Mode
-
-For detailed debugging information:
-
-```bash
-# Enable verbose Git output
-export GIT_SCOUT_DEBUG=1
-git-scout stats --since 7d
-```
 
 ## 🌟 Roadmap
 
-- [ ] Support for GitLab/GitHub API integration
-- [ ] Commit message analysis and categorization
-- [ ] Team productivity metrics and insights
-- [ ] Export to CSV/Excel formats
-- [ ] Web dashboard for multi-project overview
-- [ ] Integration with popular project management tools
+- [ ] GitHub/GitLab API integration
+- [ ] Commit message analysis
+- [ ] Team productivity metrics
+- [ ] CSV/Excel export
+- [ ] Web dashboard
+- [ ] Real-time monitoring
 - [ ] Custom report templates
-- [ ] Real-time repository monitoring
+
+## 📝 License
+
+MIT License - see LICENSE file for details.
+
+---
+
+## 💡 Pro Tips
+
+1. **Start with `git-scout init`** - it's the fastest way to get up and running
+2. **Use `--json` flag** for integrating with other tools and scripts
+3. **Combine filters** for precise analysis: `--author alice --branch main --since 7d`
+4. **Regular analysis** helps track team productivity and code quality trends
+5. **Safe scanning** means no macOS permission popups - scan worry-free!
 
 ---
 
 **Made with ❤️ for developers who love beautiful, insightful Git analytics.**
+
+**🚀 Get started in 30 seconds: `git-scout init`**

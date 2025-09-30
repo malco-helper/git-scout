@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Enhanced
 
 - **Improved Setup Experience**: Updated setup script to use the new init command
-- **Better Documentation**: Enhanced README and INSTALLATION guides with init command examples
+- **Better Documentation**: Enhanced README with comprehensive installation and usage guide
 - **Streamlined Workflow**: Reduced manual configuration requirements for new users
 
 ### Commands
