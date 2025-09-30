@@ -1,0 +1,28 @@
+name: Local Analysis (No Token)
+
+on:
+  push:
+    branches: [main, develop]
+
+jobs:
+  analyze-local:
+    runs-on: ubuntu-latest
+    name: Analyze Without GitHub API
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Local Analysis
+        uses: ./.github/actions/git-scout
+        with:
+          # No github-token needed - only analyzing local git history
+          command: 'stats --since 30d --json'
+          post-comment: false  # Not posting to PR
+          quality-gate: false
+      
+      - name: Display Results
+        run: |
+          echo "Analysis complete! Check the logs above for results."

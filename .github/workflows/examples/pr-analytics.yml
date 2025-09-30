@@ -1,0 +1,31 @@
+name: PR Analytics
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write  # Required for posting comments
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    name: Analyze PR Activity
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for accurate analysis
+      
+      - name: Run Git Scout Analysis
+        uses: ./.github/actions/git-scout
+        with:
+          # Token is auto-injected by GitHub
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          command: 'stats --since 7d --json'
+          post-comment: true
+          quality-gate: true
+          quality-threshold: 70
+          fail-on-quality: false  # Warning only, don't block PR

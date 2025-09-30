@@ -1,0 +1,36 @@
+name: Strict Quality Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+    name: Enforce Quality Standards
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Quality Gate
+        uses: ./.github/actions/git-scout
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          command: 'stats --since 7d --json'
+          post-comment: true
+          quality-gate: true
+          quality-threshold: 80  # Strict threshold
+          fail-on-quality: true  # Block PR if quality is low
+      
+      - name: Quality Check Passed
+        if: success()
+        run: |
+          echo "✅ Quality standards met!"
+          echo "PR is ready for review."

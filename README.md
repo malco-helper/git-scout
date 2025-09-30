@@ -152,6 +152,71 @@ See Git Scout in action with these beautiful terminal interfaces:
 
 [View Full Demo →](docs/demo/init-setup.md)
 
+## 🔄 CI/CD Integration
+
+### GitHub Actions
+
+Automate your repository analytics with our GitHub Action! Get instant insights on every PR.
+
+#### Quick Setup
+
+```yaml
+# .github/workflows/pr-analytics.yml
+name: PR Analytics
+on: [pull_request]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: malcohelper/git-scout-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          post-comment: true
+          quality-gate: true
+```
+
+#### Features
+
+- 🤖 **Automated PR Comments** - Post analytics directly to pull requests
+- ✅ **Quality Gates** - Block PRs that don't meet standards
+- 📊 **JSON Export** - Integrate with external systems
+- ⏰ **Scheduled Reports** - Weekly/monthly automated reports
+- 🎯 **Smart Token Management** - Auto-injection with clear validation
+
+#### Example Output
+
+When a PR is opened, Git Scout automatically posts:
+
+```markdown
+## 🔍 Git Scout Analysis
+
+**Quality Score**: 85/100 ✅
+
+### 📊 Repository Statistics
+| Metric | Value |
+|--------|-------|
+| Total Commits | 45 |
+| Files Changed | 23 |
+| Lines Added | +1,234 |
+| Active Authors | 5 |
+
+### 👥 Top Contributors
+- Alice: 20 commits, 15 files
+- Bob: 15 commits, 10 files
+```
+
+📖 **[View Full Documentation →](.github/actions/git-scout/README.md)**
+
+---
+
 ## 🎯 Core Commands
 
 ### `git-scout init` - Auto Setup 🆕
