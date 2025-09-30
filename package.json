@@ -33,12 +33,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/malco-helper/git-scout.git"
+    "url": "git+https://github.com/malcohelper/git-scout.git"
   },
   "bugs": {
-    "url": "https://github.com/malco-helper/git-scout/issues"
+    "url": "https://github.com/malcohelper/git-scout/issues"
   },
-  "homepage": "https://github.com/malco-helper/git-scout#readme",
+  "homepage": "https://github.com/malcohelper/git-scout#readme",
   "engines": {
     "node": ">=16.0.0"
   },

@@ -99,3 +99,4 @@ git-scout.config.json
 # Test artifacts
 test-results/
 test-output/
+.npmrc
