@@ -1,6 +1,6 @@
 {
   "name": "git-scout",
-  "version": "1.1.0",
+  "version": "0.0.1",
   "description": "A CLI tool for managing and analyzing multiple Git repositories with advanced statistics",
   "main": "dist/index.js",
   "bin": {
@@ -29,16 +29,16 @@
     "git-analysis",
     "typescript"
   ],
-  "author": "malcohepler",
+  "author": "malco-helper",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/malcohepler/git-scout.git"
+    "url": "git+https://github.com/malco-helper/git-scout.git"
   },
   "bugs": {
-    "url": "https://github.com/malcohepler/git-scout/issues"
+    "url": "https://github.com/malco-helper/git-scout/issues"
   },
-  "homepage": "https://github.com/malcohepler/git-scout#readme",
+  "homepage": "https://github.com/malco-helper/git-scout#readme",
   "engines": {
     "node": ">=16.0.0"
   },
