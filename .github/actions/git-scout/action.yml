@@ -1,54 +1,54 @@
-name: 'Git Scout Analytics'
-description: 'Analyze repository activity and post insights to PRs with smart defaults'
-author: 'malcohelper'
+name: "Git Scout Analytics"
+description: "Analyze repository activity and post insights to PRs with smart defaults"
+author: "malcohelper"
 
 branding:
-  icon: 'activity'
-  color: 'blue'
+  icon: "activity"
+  color: "blue"
 
 inputs:
   github-token:
-    description: 'GitHub token (auto-provided, only required when posting comments or using GitHub API)'
+    description: "GitHub token (auto-provided, only required when posting comments or using GitHub API)"
     required: false
     # Note: Cannot use default expressions in composite actions
-  
+
   command:
     description: 'Git Scout command to run (e.g., "stats --since 7d")'
     required: false
-    default: 'stats --since 7d'
-  
+    default: "stats --since 7d"
+
   post-comment:
-    description: 'Post results as PR comment (requires github-token)'
+    description: "Post results as PR comment (requires github-token)"
     required: false
-    default: 'true'
-  
+    default: "true"
+
   quality-gate:
-    description: 'Enable quality gate checks'
+    description: "Enable quality gate checks"
     required: false
-    default: 'false'
-  
+    default: "false"
+
   quality-threshold:
-    description: 'Minimum quality score (0-100)'
+    description: "Minimum quality score (0-100)"
     required: false
-    default: '70'
-  
+    default: "70"
+
   fail-on-quality:
-    description: 'Fail the action if quality gate fails'
+    description: "Fail the action if quality gate fails"
     required: false
-    default: 'false'
+    default: "false"
 
 outputs:
   stats-json:
-    description: 'JSON output of the analysis'
-  
+    description: "JSON output of the analysis"
+
   quality-score:
-    description: 'Overall quality score (0-100)'
-  
+    description: "Overall quality score (0-100)"
+
   quality-passed:
-    description: 'Whether quality gate passed (true/false)'
+    description: "Whether quality gate passed (true/false)"
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Validate Configuration
       shell: bash
@@ -56,19 +56,19 @@ runs:
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "🔍 Git Scout Configuration Validation"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        
+
         POST_COMMENT="${{ inputs.post-comment }}"
         HAS_TOKEN="${{ inputs.github-token != '' }}"
         QUALITY_GATE="${{ inputs.quality-gate }}"
         IS_PR="${{ github.event_name == 'pull_request' }}"
-        
+
         echo "📋 Configuration:"
         echo "  • Post Comment: $POST_COMMENT"
         echo "  • Has Token: $HAS_TOKEN"
         echo "  • Quality Gate: $QUALITY_GATE"
         echo "  • Event Type: ${{ github.event_name }}"
         echo ""
-        
+
         # Validate token requirement
         if [ "$POST_COMMENT" == "true" ] && [ "$IS_PR" == "true" ] && [ "$HAS_TOKEN" == "false" ]; then
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -85,7 +85,7 @@ runs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           exit 1
         fi
-        
+
         # Informational messages
         if [ "$HAS_TOKEN" == "false" ]; then
           echo "ℹ️  Running in local-only mode (no GitHub API access)"
@@ -101,15 +101,15 @@ runs:
             echo "   • Quality gate enabled (threshold: ${{ inputs.quality-threshold }})"
           fi
         fi
-        
+
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    
+
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
-    
+        node-version: "18"
+
     - name: Install Git Scout
       shell: bash
       run: |
@@ -121,7 +121,7 @@ runs:
         }
         echo "✅ Git Scout installed successfully"
         git-scout --version || echo "⚠️  Warning: Could not verify Git Scout version"
-    
+
     - name: Run Git Scout Analysis
       id: analysis
       shell: bash
@@ -131,7 +131,7 @@ runs:
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "Command: git-scout ${{ inputs.command }} --json"
         echo ""
-        
+
         # Run analysis and capture output
         if git-scout ${{ inputs.command }} --json > /tmp/git-scout-results.json 2>&1; then
           echo "✅ Analysis completed successfully"
@@ -148,10 +148,10 @@ runs:
           # Don't fail - some commands might not produce JSON
           echo "stats-json={}" >> $GITHUB_OUTPUT
         fi
-        
+
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    
+
     - name: Calculate Quality Score
       id: quality
       shell: bash
@@ -159,11 +159,11 @@ runs:
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "📊 Quality Score Calculation"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        
+
         # Calculate quality score based on stats
         # TODO: Implement real calculation based on metrics
         SCORE=75  # Default score
-        
+
         if [ -f /tmp/git-scout-results.json ]; then
           # Try to calculate from actual data
           COMMITS=$(cat /tmp/git-scout-results.json | jq -r '.totalCommits // 0' 2>/dev/null || echo "0")
@@ -182,11 +182,11 @@ runs:
             SCORE=65
           fi
         fi
-        
+
         echo ""
         echo "Quality Score: $SCORE/100"
         echo "quality-score=$SCORE" >> $GITHUB_OUTPUT
-        
+
         THRESHOLD=${{ inputs.quality-threshold }}
         if [ "$SCORE" -ge "$THRESHOLD" ]; then
           echo "quality-passed=true" >> $GITHUB_OUTPUT
@@ -195,9 +195,9 @@ runs:
           echo "quality-passed=false" >> $GITHUB_OUTPUT
           echo "❌ Quality gate failed: $SCORE < $THRESHOLD"
         fi
-        
+
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    
+
     - name: Post PR Comment
       if: |
         inputs.post-comment == 'true' && 
@@ -209,16 +209,16 @@ runs:
         script: |
           const fs = require('fs');
           const statsFile = '/tmp/git-scout-results.json';
-          
+
           console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
           console.log('💬 Posting PR Comment');
           console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-          
+
           if (!fs.existsSync(statsFile)) {
             console.log('⚠️  No stats file found, creating default comment');
             return;
           }
-          
+
           let stats = {};
           try {
             stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
@@ -226,49 +226,44 @@ runs:
             console.log('⚠️  Could not parse stats file:', error.message);
             stats = {};
           }
-          
+
           const qualityScore = '${{ steps.quality.outputs.quality-score }}';
           const qualityPassed = '${{ steps.quality.outputs.quality-passed }}';
           const qualityIcon = qualityPassed === 'true' ? '✅' : '❌';
-          
-          const comment = `## 🔍 Git Scout Analysis
 
-**Quality Score**: ${qualityScore}/100 ${qualityIcon}
+          // Build comment using string concatenation to avoid YAML parsing issues
+          let comment = '## 🔍 Git Scout Analysis\n\n';
+          comment += 'Quality Score: ' + qualityScore + '/100 ' + qualityIcon + '\n\n';
+          comment += '### 📊 Repository Statistics\n\n';
+          comment += '- Total Commits: ' + (stats.totalCommits || 0) + '\n';
+          comment += '- Files Changed: ' + (stats.totalFiles || 0) + '\n';
+          comment += '- Lines Added: +' + (stats.totalAdditions || 0) + '\n';
+          comment += '- Lines Removed: -' + (stats.totalDeletions || 0) + '\n';
+          comment += '- Active Authors: ' + (stats.activeAuthors || 0) + '\n\n';
 
-### 📊 Repository Statistics
+          comment += '### 👥 Top Contributors\n\n';
+          if (stats.authorStats && stats.authorStats.length > 0) {
+            stats.authorStats.slice(0, 5).forEach(author => {
+              comment += '- ' + author.name + ': ' + author.commits + ' commits, ' + author.filesChanged + ' files\n';
+            });
+          } else {
+            comment += '_No contributor data available_\n';
+          }
 
-| Metric | Value |
-|:-------|------:|
-| Total Commits | ${stats.totalCommits || 0} |
-| Files Changed | ${stats.totalFiles || 0} |
-| Lines Added | +${stats.totalAdditions || 0} |
-| Lines Removed | -${stats.totalDeletions || 0} |
-| Active Authors | ${stats.activeAuthors || 0} |
+          if (qualityPassed === 'false') {
+            const threshold = '${{ inputs.quality-threshold }}';
+            comment += '\n### ⚠️ Quality Gate Status\n\n';
+            comment += 'Quality score (' + qualityScore + ') is below threshold (' + threshold + ').\n\n';
+            comment += 'Recommendations:\n';
+            comment += '- Review recent changes\n';
+            comment += '- Add more tests\n';
+            comment += '- Improve code documentation\n';
+            comment += '- Check for code smells\n';
+          }
 
-### 👥 Top Contributors
+          comment += '\n---\n\n';
+          comment += '<sub>Generated by [Git Scout](https://github.com/malcohelper/git-scout)</sub>';
 
-${stats.authorStats?.slice(0, 5).map(author => 
-  `- **${author.name}**: ${author.commits} commits, ${author.filesChanged} files`
-).join('\n') || '_No contributor data available_'}
-
-${qualityPassed === 'false' ? `
-
-### ⚠️ Quality Gate Status
-
-Quality score (${qualityScore}) is below threshold (${'$'}{{ inputs.quality-threshold }}).
-
-**Recommendations:**
-- Review recent changes
-- Add more tests
-- Improve code documentation
-- Check for code smells
-
-` : ''}
-
----
-
-<sub>Generated by [Git Scout](https://github.com/malcohelper/git-scout) • [View Full Report](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})</sub>`;
-          
           try {
             // Find existing comment
             const { data: comments } = await github.rest.issues.listComments({
@@ -304,9 +299,9 @@ Quality score (${qualityScore}) is below threshold (${'$'}{{ inputs.quality-thre
             console.log('❌ Failed to post comment:', error.message);
             core.setFailed(error.message);
           }
-          
+
           console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    
+
     - name: Check Quality Gate
       if: inputs.quality-gate == 'true' && steps.quality.outputs.quality-passed == 'false'
       shell: bash
@@ -318,7 +313,7 @@ Quality score (${qualityScore}) is below threshold (${'$'}{{ inputs.quality-thre
         echo "Quality Score: ${{ steps.quality.outputs.quality-score }}/100"
         echo "Threshold: ${{ inputs.quality-threshold }}/100"
         echo ""
-        
+
         if [ "${{ inputs.fail-on-quality }}" == "true" ]; then
           echo "🚫 Failing workflow as requested (fail-on-quality: true)"
           echo ""
@@ -336,7 +331,7 @@ Quality score (${qualityScore}) is below threshold (${'$'}{{ inputs.quality-thre
           echo "Consider setting fail-on-quality: true to enforce quality standards"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         fi
-    
+
     - name: Summary
       if: always()
       shell: bash
