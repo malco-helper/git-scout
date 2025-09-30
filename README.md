@@ -15,9 +15,34 @@ A powerful CLI tool for managing and analyzing multiple Git repositories with ad
 - 🍎 **macOS Optimized**: Built specifically for macOS with proper timezone handling and safe scanning
 - 🛡️ **Privacy-Focused**: Avoids sensitive directories (Photos, Music, etc.) - no permission requests
 
-## 🚀 Quick Installation & Setup
+## ⚡ Quick Start (30 seconds)
+
+```bash
+# 1. Install globally
+npm install -g git-scout
+
+# 2. Auto-configure your repositories
+git-scout init
+
+# 3. Start analyzing!
+git-scout today
+```
+
+## 🚀 Installation & Setup
 
 ### Step 1: Install Git Scout
+
+**🎯 Recommended: Install from NPM (Easiest)**
+
+```bash
+# Install globally with npm
+npm install -g git-scout
+
+# Or install globally with yarn
+yarn global add git-scout
+```
+
+**🔧 Development: Clone from GitHub**
 
 ```bash
 # Clone the repository
@@ -230,15 +255,31 @@ rm ~/.git-scout/config.json && git-scout init  # Reset and reconfigure
 
 ## 🗑️ Uninstallation
 
+**If installed via NPM/Yarn:**
+
+```bash
+# Remove global command (npm)
+npm uninstall -g git-scout
+
+# Remove global command (yarn)
+yarn global remove git-scout
+```
+
+**If installed from source:**
+
 ```bash
 # Remove global command
 npm unlink -g git-scout
 
-# Remove configuration (optional)
-rm -rf ~/.git-scout
-
 # Remove source code
 rm -rf /path/to/git-scout
+```
+
+**Remove configuration (optional):**
+
+```bash
+# Remove configuration files
+rm -rf ~/.git-scout
 ```
 
 ## 🧪 Development & Testing
