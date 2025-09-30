@@ -80,8 +80,7 @@ runs:
           echo "✅ Fix Option 1: Add github-token to your workflow:"
           echo "  - uses: malcohelper/git-scout-action@v1"
           echo "    with:"
-          TOKEN_VAR='${{ secrets.GITHUB_TOKEN }}'
-          echo "      github-token: $TOKEN_VAR"
+          echo "      github-token: \${{ secrets.GITHUB""_TOKEN }}"
           echo ""
           echo "✅ Fix Option 2: Disable PR comments:"
           echo "  - uses: malcohelper/git-scout-action@v1"
@@ -261,7 +260,7 @@ ${qualityPassed === 'false' ? `
 
 ### ⚠️ Quality Gate Status
 
-Quality score (${qualityScore}) is below threshold (${{ inputs.quality-threshold }}).
+Quality score (${qualityScore}) is below threshold (${'$'}{{ inputs.quality-threshold }}).
 
 **Recommendations:**
 - Review recent changes
