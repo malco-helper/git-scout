@@ -1,0 +1,51 @@
+{
+  "name": "git-scout",
+  "version": "1.0.0",
+  "description": "A CLI tool for managing and analyzing multiple Git repositories with advanced statistics",
+  "main": "dist/index.js",
+  "bin": {
+    "git-scout": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist",
+    "prepare": "npm run build",
+    "link:local": "npm run build && npm link"
+  },
+  "keywords": [
+    "git",
+    "cli",
+    "repository",
+    "statistics",
+    "multi-repo",
+    "macos"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "inquirer": "^8.2.6",
+    "cli-table3": "^0.6.3",
+    "zod": "^3.22.4",
+    "simple-git": "^3.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@types/inquirer": "^8.2.10",
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "@typescript-eslint/parser": "^6.7.5",
+    "eslint": "^8.51.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
+  }
+}

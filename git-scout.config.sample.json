@@ -1,0 +1,30 @@
+{
+  "projects": [
+    {
+      "name": "App iOS",
+      "path": "/Users/yourname/Dev/app-ios",
+      "description": "iOS mobile application"
+    },
+    {
+      "name": "Backend API",
+      "path": "/Users/yourname/Dev/backend-api",
+      "description": "Node.js REST API server"
+    },
+    {
+      "name": "RN Client",
+      "path": "/Users/yourname/Dev/rn-client",
+      "description": "React Native mobile client"
+    },
+    {
+      "name": "Web Dashboard",
+      "path": "/Users/yourname/Dev/web-dashboard",
+      "description": "React web application"
+    }
+  ],
+  "defaultSinceDays": 1,
+  "preferences": {
+    "maxFileLimit": 50,
+    "defaultBranch": "main",
+    "timezone": "America/New_York"
+  }
+}
