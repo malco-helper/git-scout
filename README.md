@@ -29,6 +29,7 @@ cd git-scout
 ```
 
 **Or manual installation:**
+
 ```bash
 npm install && npm run build && npm link
 ```
@@ -41,6 +42,7 @@ git-scout init
 ```
 
 **What this does:**
+
 - 🔍 Automatically scans for Git repositories in safe directories
 - 📝 Extracts project descriptions from package.json/README files
 - ⚡ Creates configuration instantly - no manual setup needed
@@ -62,6 +64,7 @@ git-scout stats --since 7d
 ## 🎯 Core Commands
 
 ### `git-scout init` - Auto Setup 🆕
+
 **The easiest way to get started!**
 
 ```bash
@@ -71,10 +74,12 @@ git-scout init --global                 # Force global configuration
 ```
 
 **Safe Scanning:**
+
 - ✅ Scans: `~/Projects`, `~/Dev`, `~/Code`, `~/GitHub`, `~/Documents/Projects`
 - ❌ Avoids: Photos, Music, Movies, System directories (no permission requests!)
 
 ### `git-scout today` - Daily Activity
+
 ```bash
 git-scout today                          # Today's activity
 git-scout today --author alice           # Filter by author
@@ -82,6 +87,7 @@ git-scout today --branch main            # Filter by branch
 ```
 
 ### `git-scout stats` - Comprehensive Analytics
+
 ```bash
 git-scout stats --since 7d               # Weekly statistics
 git-scout stats --since "2025-09-01"     # Since specific date
@@ -89,6 +95,7 @@ git-scout stats --author alice --json    # JSON output for specific author
 ```
 
 ### `git-scout branches` - Branch Explorer
+
 ```bash
 git-scout branches                       # Interactive branch explorer
 git-scout branches --project "My App"    # Specific project
@@ -96,6 +103,7 @@ git-scout branches --since 30d          # Show recent activity
 ```
 
 ### `git-scout projects` - Project Management
+
 ```bash
 git-scout projects                       # List and select projects
 git-scout projects --json               # JSON output
@@ -104,6 +112,7 @@ git-scout projects --json               # JSON output
 ## 📊 Sample Output
 
 ### Author Statistics
+
 ```
 ┌─────────────────────────┬─────────┬───────┬────────┬────────┐
 │ AUTHOR                  │ COMMITS │ FILES │ +LINES │ -LINES │
@@ -114,11 +123,12 @@ git-scout projects --json               # JSON output
 ```
 
 ### Branch Information
+
 ```
 🌿 Branch: develop
 
 Latest commit: a1b2c3d
-Author: John Doe  
+Author: John Doe
 Date: 09/30/2025 14:30
 Message: Add user authentication feature
 Recent commits: 12
@@ -135,12 +145,15 @@ Git Scout supports natural date expressions:
 ## ⚙️ Configuration
 
 ### Automatic (Recommended)
+
 ```bash
 git-scout init  # One command setup!
 ```
 
 ### Manual Configuration
+
 Create `~/.git-scout/config.json`:
+
 ```json
 {
   "projects": [
@@ -156,6 +169,7 @@ Create `~/.git-scout/config.json`:
 ## 🔧 Advanced Usage
 
 ### JSON Integration
+
 ```bash
 # Export data for other tools
 git-scout stats --since 7d --json > weekly-report.json
@@ -163,6 +177,7 @@ git-scout today --json | jq '.stats.totalCommits'
 ```
 
 ### Filtering & Analysis
+
 ```bash
 # Team productivity analysis
 git-scout stats --since 30d --author "team@company.com"
@@ -175,6 +190,7 @@ git-scout stats --since 7d --limit 50
 ```
 
 ### Multiple Projects Workflow
+
 ```bash
 # 1. Configure multiple projects
 git-scout init
@@ -189,21 +205,25 @@ git-scout today
 ## 🐛 Troubleshooting
 
 ### Command not found
+
 ```bash
 npm link  # Re-link the package
 ```
 
 ### No repositories found
+
 ```bash
 git-scout init --scan-path ~/your-dev-folder  # Custom scan path
 ```
 
 ### Permission issues
+
 ```bash
 chmod +x scripts/setup.sh  # Make setup script executable
 ```
 
 ### Config issues
+
 ```bash
 rm ~/.git-scout/config.json && git-scout init  # Reset and reconfigure
 ```
@@ -224,11 +244,13 @@ rm -rf /path/to/git-scout
 ## 🧪 Development & Testing
 
 ### Prerequisites
+
 - Node.js >= 16.0.0
 - Git
 - macOS (primary target)
 
 ### Development Setup
+
 ```bash
 git clone <repository-url>
 cd git-scout
@@ -239,6 +261,7 @@ npm run build            # Production build
 ```
 
 ### Architecture
+
 ```
 src/
 ├── commands/           # CLI commands (init, projects, branches, today, stats)
