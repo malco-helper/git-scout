@@ -21,7 +21,7 @@ A powerful CLI tool for managing and analyzing multiple Git repositories with ad
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/git-scout.git
+git clone https://github.com/malco-helper/git-scout.git
 cd git-scout
 
 # Auto-install everything
