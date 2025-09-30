@@ -390,13 +390,29 @@ src/
 
 ## 🌟 Roadmap
 
-- [ ] GitHub/GitLab API integration
-- [ ] Commit message analysis
-- [ ] Team productivity metrics
-- [ ] CSV/Excel export
-- [ ] Web dashboard
-- [ ] Real-time monitoring
-- [ ] Custom report templates
+See our detailed [ROADMAP.md](ROADMAP.md) for the complete development plan.
+
+### Highlights:
+
+#### 🔥 Phase 1: CI/CD Integration (Priority)
+- [ ] **GitHub Actions Integration** - Automated PR analytics and quality gates
+- [ ] **GitLab CI/CD Integration** - MR comments and pipeline analytics
+- [ ] **Jenkins Plugin** - Legacy CI/CD support
+- [ ] **Docker Image** - Universal CI/CD integration
+
+#### 🌐 Phase 2-3: API Integration
+- [ ] **GitHub API Integration** - Organization-wide analytics, PR/Issue tracking, Security alerts
+- [ ] **GitLab API Integration** - Group-wide analytics, MR/Issue tracking, Pipeline analytics
+
+#### 📊 Phase 4-6: Advanced Features
+- [ ] **Commit Message Analysis** - Pattern detection and quality scoring
+- [ ] **Team Productivity Metrics** - Cross-team comparison and trends
+- [ ] **Web Dashboard** - Interactive analytics and visualization
+- [ ] **CSV/Excel Export** - Data export and custom integrations
+- [ ] **Real-time Monitoring** - Live activity tracking
+- [ ] **Custom Report Templates** - Configurable report generation
+
+**📖 [View Full Roadmap →](ROADMAP.md)**
 
 ## 📝 License
 
