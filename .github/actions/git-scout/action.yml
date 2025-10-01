@@ -89,6 +89,34 @@ runs:
         echo "✅ Git Scout installed successfully"
         git-scout --version || echo "⚠️  Warning: Could not verify Git Scout version"
 
+    - name: Setup Git Scout Configuration
+      shell: bash
+      run: |
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "⚙️  Setting up Git Scout Configuration"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        
+        # Get repository name from directory
+        REPO_NAME=$(basename "$GITHUB_WORKSPACE")
+        
+        # Create a minimal config file for the current repository
+        cat > "$GITHUB_WORKSPACE/git-scout.config.json" << EOF
+        {
+          "projects": [
+            {
+              "name": "$REPO_NAME",
+              "path": "$GITHUB_WORKSPACE"
+            }
+          ],
+          "defaultSinceDays": 7
+        }
+        EOF
+        
+        echo "✅ Created configuration for repository: $REPO_NAME"
+        echo "   Path: $GITHUB_WORKSPACE"
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
     - name: Run Git Scout Analysis
       id: analysis
       shell: bash
@@ -161,14 +189,14 @@ runs:
 
         # Parse stats
         if [ -f "$STATS_FILE" ]; then
-          COMMITS=$(jq -r '.totalCommits // 0' "$STATS_FILE" 2>/dev/null || echo "0")
-          FILES=$(jq -r '.totalFiles // 0' "$STATS_FILE" 2>/dev/null || echo "0")
-          AUTHORS=$(jq -r '.activeAuthors // 0' "$STATS_FILE" 2>/dev/null || echo "0")
-          ADDITIONS=$(jq -r '.totalAdditions // 0' "$STATS_FILE" 2>/dev/null || echo "0")
-          DELETIONS=$(jq -r '.totalDeletions // 0' "$STATS_FILE" 2>/dev/null || echo "0")
+          COMMITS=$(jq -r '.summary.totalCommits // 0' "$STATS_FILE" 2>/dev/null || echo "0")
+          FILES=$(jq -r '.summary.totalFiles // 0' "$STATS_FILE" 2>/dev/null || echo "0")
+          AUTHORS=$(jq -r '.summary.uniqueAuthors // 0' "$STATS_FILE" 2>/dev/null || echo "0")
+          ADDITIONS=$(jq -r '.summary.totalLinesAdded // 0' "$STATS_FILE" 2>/dev/null || echo "0")
+          DELETIONS=$(jq -r '.summary.totalLinesDeleted // 0' "$STATS_FILE" 2>/dev/null || echo "0")
           
           # Get top contributors
-          TOP_CONTRIBUTORS=$(jq -r '.authorStats[:3] | map("• *" + .name + "*: " + (.commits | tostring) + " commits") | join("\n")' "$STATS_FILE" 2>/dev/null || echo "No data available")
+          TOP_CONTRIBUTORS=$(jq -r '.authorStats[:3] | map("• *" + .author + "*: " + (.commits | tostring) + " commits") | join("\n")' "$STATS_FILE" 2>/dev/null || echo "No data available")
         else
           COMMITS="0"
           FILES="0"
