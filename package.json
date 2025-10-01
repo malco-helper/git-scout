@@ -1,5 +1,5 @@
 {
-  "name": "@malcohelper/git-scout",
+  "name": "git-scout",
   "version": "0.0.3",
   "description": "A CLI tool for managing and analyzing multiple Git repositories with advanced statistics",
   "main": "dist/index.js",
