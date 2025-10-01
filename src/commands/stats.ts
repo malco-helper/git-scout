@@ -76,11 +76,11 @@ export class StatsCommand {
             }
           } catch (error) {
             // Fall through to strategy 2
-            project = await this.detectCurrentRepository();
+            project = await this.detectCurrentRepository(options.json);
           }
         } else {
           // Strategy 2: No config exists, try to use current directory as git repo
-          project = await this.detectCurrentRepository();
+          project = await this.detectCurrentRepository(options.json);
         }
       } else {
         // Project name was specified via --project flag
@@ -291,7 +291,9 @@ export class StatsCommand {
     }
   }
 
-  private static async detectCurrentRepository(): Promise<{
+  private static async detectCurrentRepository(
+    jsonMode: boolean = false
+  ): Promise<{
     name: string;
     path: string;
   }> {
@@ -302,8 +304,8 @@ export class StatsCommand {
       const { basename } = await import("path");
       const name = basename(currentDir);
 
-      if (!process.stdin.isTTY) {
-        // In non-interactive mode, just use the current directory
+      // Only show info message in non-interactive mode if NOT in JSON mode
+      if (!process.stdin.isTTY && !jsonMode) {
         console.log(
           TableRenderer.renderInfo(
             `No configuration found. Using current repository: ${name}`

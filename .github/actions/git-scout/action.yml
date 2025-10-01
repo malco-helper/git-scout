@@ -100,7 +100,8 @@ runs:
         echo ""
 
         # Run analysis and capture output
-        if git-scout stats --since 7d --json > /tmp/git-scout-results.json 2>&1; then
+        # Redirect stdout to file, but keep stderr visible
+        if git-scout stats --since 7d --json > /tmp/git-scout-results.json 2> /tmp/git-scout-errors.txt; then
           echo "✅ Analysis completed successfully"
           
           if [ -f /tmp/git-scout-results.json ]; then
@@ -109,8 +110,36 @@ runs:
             cat /tmp/git-scout-results.json | jq -C . 2>/dev/null || cat /tmp/git-scout-results.json | head -20
           fi
         else
-          echo "⚠️  Analysis completed with warnings"
-          echo "Check logs above for details"
+          EXIT_CODE=$?
+          echo "❌ Analysis failed with exit code: $EXIT_CODE"
+          echo ""
+          
+          # Show error output
+          if [ -f /tmp/git-scout-errors.txt ] && [ -s /tmp/git-scout-errors.txt ]; then
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "Error Output:"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            cat /tmp/git-scout-errors.txt
+            echo ""
+          fi
+          
+          # Show any partial output that was captured
+          if [ -f /tmp/git-scout-results.json ] && [ -s /tmp/git-scout-results.json ]; then
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "Partial Output:"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            cat /tmp/git-scout-results.json
+            echo ""
+          fi
+          
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "💡 Troubleshooting Tips:"
+          echo "  • Ensure you're running this in a Git repository"
+          echo "  • Check if there are commits in the last 7 days"
+          echo "  • Verify Git is properly configured in the runner"
+          echo "  • Try running: git log --since=7d"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          exit 1
         fi
 
         echo ""
