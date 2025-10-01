@@ -27,8 +27,11 @@ export class TodayCommand {
       // Try to load config, but don't fail if it doesn't exist
       try {
         configManager = ConfigManager.getInstance();
+        // Validate that config is actually loadable
+        configManager.getConfig();
       } catch (error) {
-        // Config doesn't exist, we'll handle this below
+        // Config doesn't exist or is invalid, we'll handle this below
+        configManager = null;
       }
 
       // If no project specified, try multiple strategies
