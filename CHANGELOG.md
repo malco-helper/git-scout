@@ -5,6 +5,83 @@ All notable changes to Git Scout will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.3] - 2025-10-01
+
+### Added
+
+- **🎯 GitHub Actions Integration**: Complete GitHub Action for automated repository analytics
+  - Slack webhook integration for weekly/scheduled reports
+  - Auto-creates `git-scout.config.json` in workspace
+  - Formatted Slack messages with Block Kit
+  - Scheduled analytics with configurable cron
+  - Support for custom channels, usernames, and report titles
+- **📊 Slack Reporting**: Beautiful formatted reports sent directly to Slack channels
+  - Key metrics: commits, files changed, contributors, lines added/deleted
+  - Top contributors section with commit counts
+  - Links to GitHub Actions workflow run
+- **📦 Public npm Registry**: Published to npmjs.org for easier access
+- **📖 Comprehensive Documentation**: 
+  - Complete USAGE guide for GitHub Actions
+  - Updated README with Slack integration examples
+  - Updated ROADMAP with completed features
+
+### Fixed
+
+- **🐛 JSON Output Corruption**: Fixed info messages appearing in JSON mode
+  - Added `jsonMode` parameter to `detectCurrentRepository()`
+  - Prevents console.log output when `--json` flag is used
+- **🔧 Config Validation**: Properly handles missing configuration files
+  - Validates config immediately after `getInstance()` call
+  - Sets `configManager` to `null` if config doesn't exist
+  - Allows graceful fallback to current directory detection
+- **⚡ Interactive Prompts**: Fixed prompts appearing in non-interactive environments
+  - Treats `--json` flag as non-interactive mode
+  - Prevents exit code 130 (interrupted process) in CI/CD
+  - Auto-selects first project in non-interactive mode
+- **🔍 Error Visibility**: Improved error handling in GitHub Actions
+  - Separated stderr from stdout for better error visibility
+  - Added comprehensive troubleshooting tips
+  - Shows partial output when available
+  - Clear error messages with actionable solutions
+
+### Changed
+
+- **🚀 Non-Interactive Detection**: Enhanced to include JSON mode
+  - `const isNonInteractive = !process.stdin.isTTY || options.json === true`
+  - Ensures reliable CI/CD compatibility
+- **📝 Field Paths**: Updated Slack payload parsing
+  - Changed from `.totalCommits` to `.summary.totalCommits`
+  - Changed from `.activeAuthors` to `.summary.uniqueAuthors`
+  - Changed from `.name` to `.author` in authorStats
+- **🔐 Package Publishing**: Removed GitHub Packages registry configuration
+  - Now publishes to public npm for easier installation
+  - Added `.npmrc` to `.gitignore` for security
+
+### GitHub Action Features
+
+- ✅ Zero configuration setup (auto-creates config)
+- ✅ Works with any Git repository
+- ✅ Configurable Slack integration
+- ✅ Scheduled or on-demand execution
+- ✅ Comprehensive error handling
+- ✅ Detailed logging and troubleshooting
+
+### Technical Improvements
+
+- **Config Management**: Automatic workspace configuration generation
+- **Error Handling**: Comprehensive error capture and reporting
+- **JSON Parsing**: Correct field path traversal for nested objects
+- **CI/CD Compatibility**: Full support for GitHub Actions environment
+- **Package Distribution**: Published to public npm registry
+
+### Documentation
+
+- Added complete GitHub Actions USAGE guide
+- Updated README with Slack integration examples
+- Updated ROADMAP marking Phase 1.1 as completed
+- Added troubleshooting section for common issues
+- Documented all configuration options
+
 ## [0.0.2] - 2025-10-01
 
 ### Fixed
