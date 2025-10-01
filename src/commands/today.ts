@@ -18,45 +18,84 @@ export interface TodayOptions {
 export class TodayCommand {
   public static async execute(options: TodayOptions = {}): Promise<void> {
     try {
-      const configManager = ConfigManager.getInstance();
-      let projectName = options.project;
+      // Check if we're in a non-interactive environment (CI/GitHub Actions)
+      const isNonInteractive = !process.stdin.isTTY;
 
-      // If no project specified, try to get from selected projects or prompt
-      if (!projectName) {
-        const selectedProjects = ProjectsCommand.getSelectedProjects();
+      let project: { name: string; path: string };
+      let configManager: ConfigManager | null = null;
 
-        if (selectedProjects.length === 1) {
-          projectName = selectedProjects[0];
-        } else if (selectedProjects.length > 1) {
-          const { selectedProject } = await inquirer.prompt([
-            {
-              type: "list",
-              name: "selectedProject",
-              message: "Select a project for today's analysis:",
-              choices: selectedProjects.map((name) => ({ name, value: name })),
-            },
-          ]);
-          projectName = selectedProject;
-        } else {
-          const projects = configManager.getAllProjects();
-          const { selectedProject } = await inquirer.prompt([
-            {
-              type: "list",
-              name: "selectedProject",
-              message: "Select a project for today's analysis:",
-              choices: projects.map((p) => ({
-                name: `${p.name} (${p.path})`,
-                value: p.name,
-              })),
-            },
-          ]);
-          projectName = selectedProject;
-        }
+      // Try to load config, but don't fail if it doesn't exist
+      try {
+        configManager = ConfigManager.getInstance();
+      } catch (error) {
+        // Config doesn't exist, we'll handle this below
       }
 
-      const project = configManager.getProjectByName(projectName!);
-      if (!project) {
-        throw new Error(`Project "${projectName}" not found in configuration`);
+      // If no project specified, try multiple strategies
+      if (!options.project) {
+        // Strategy 1: If config exists, use it
+        if (configManager) {
+          try {
+            const selectedProjects = ProjectsCommand.getSelectedProjects();
+
+            if (selectedProjects.length === 1) {
+              const projectName = selectedProjects[0];
+              project = configManager.getProjectByName(projectName)!;
+            } else if (selectedProjects.length > 1 && !isNonInteractive) {
+              const { selectedProject } = await inquirer.prompt([
+                {
+                  type: "list",
+                  name: "selectedProject",
+                  message: "Select a project for today's analysis:",
+                  choices: selectedProjects.map((name) => ({
+                    name,
+                    value: name,
+                  })),
+                },
+              ]);
+              project = configManager.getProjectByName(selectedProject)!;
+            } else {
+              const projects = configManager.getAllProjects();
+              if (!isNonInteractive) {
+                const { selectedProject } = await inquirer.prompt([
+                  {
+                    type: "list",
+                    name: "selectedProject",
+                    message: "Select a project for today's analysis:",
+                    choices: projects.map((p) => ({
+                      name: `${p.name} (${p.path})`,
+                      value: p.name,
+                    })),
+                  },
+                ]);
+                project = configManager.getProjectByName(selectedProject)!;
+              } else {
+                // In non-interactive mode with multiple projects, use first one
+                project = projects[0];
+              }
+            }
+          } catch (error) {
+            // Fall through to strategy 2
+            project = await this.detectCurrentRepository();
+          }
+        } else {
+          // Strategy 2: No config exists, try to use current directory as git repo
+          project = await this.detectCurrentRepository();
+        }
+      } else {
+        // Project name was specified via --project flag
+        if (!configManager) {
+          throw new Error(
+            `Project "${options.project}" specified but no configuration found. Run "git-scout init" first.`
+          );
+        }
+        const foundProject = configManager.getProjectByName(options.project);
+        if (!foundProject) {
+          throw new Error(
+            `Project "${options.project}" not found in configuration`
+          );
+        }
+        project = foundProject;
       }
 
       // Determine time range - default to today
@@ -73,27 +112,30 @@ export class TodayCommand {
         }
       }
 
-      console.log(
-        TableRenderer.renderInfo(
-          `Analyzing today's activity in: ${project.name}`
-        )
-      );
-
-      if (options.author) {
+      // Only show info messages if not in JSON mode
+      if (!options.json) {
         console.log(
-          TableRenderer.renderInfo(`Filtering by author: ${options.author}`)
+          TableRenderer.renderInfo(
+            `Analyzing today's activity in: ${project.name}`
+          )
+        );
+
+        if (options.author) {
+          console.log(
+            TableRenderer.renderInfo(`Filtering by author: ${options.author}`)
+          );
+        }
+
+        if (options.branch) {
+          console.log(
+            TableRenderer.renderInfo(`Filtering by branch: ${options.branch}`)
+          );
+        }
+
+        console.log(
+          TableRenderer.renderLoading("Fetching commits and statistics...")
         );
       }
-
-      if (options.branch) {
-        console.log(
-          TableRenderer.renderInfo(`Filtering by branch: ${options.branch}`)
-        );
-      }
-
-      console.log(
-        TableRenderer.renderLoading("Fetching commits and statistics...")
-      );
 
       // Get commits with detailed statistics
       const commits = await GitService.getCommitsWithStats({
@@ -174,6 +216,38 @@ export class TodayCommand {
       );
       process.exit(1);
     }
+  }
+
+  private static async detectCurrentRepository(): Promise<{
+    name: string;
+    path: string;
+  }> {
+    const currentDir = process.cwd();
+
+    // Check if current directory is a git repository
+    if (await GitService.isGitRepository(currentDir)) {
+      const { basename } = await import("path");
+      const name = basename(currentDir);
+
+      if (!process.stdin.isTTY) {
+        // In non-interactive mode, just use the current directory
+        console.log(
+          TableRenderer.renderInfo(
+            `No configuration found. Using current repository: ${name}`
+          )
+        );
+      }
+
+      return {
+        name,
+        path: currentDir,
+      };
+    }
+
+    throw new Error(
+      `No git-scout configuration found and current directory is not a git repository.\n` +
+        `Please run "git-scout init" to set up configuration, or run this command from within a git repository.`
+    );
   }
 
   private static showInsights(stats: any): void {

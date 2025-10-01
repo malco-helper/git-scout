@@ -17,7 +17,7 @@ program
   .description(
     "A CLI tool for managing and analyzing multiple Git repositories with advanced statistics"
   )
-  .version("1.1.0");
+  .version("0.0.2");
 
 // Global error handler
 process.on("unhandledRejection", (error) => {

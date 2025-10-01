@@ -5,7 +5,21 @@ All notable changes to Git Scout will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2025-09-30
+## [0.0.2] - 2025-10-01
+
+### Fixed
+
+- **🔧 CI/Non-Interactive Mode Support**: `stats` and `today` commands now work in non-interactive environments (GitHub Actions, CI pipelines)
+- **📦 Auto-Repository Detection**: Commands automatically detect and use the current repository when no configuration exists
+- **✅ Improved GitHub Actions Compatibility**: Properly handles missing TTY and configuration in CI environments
+
+### Changed
+
+- Commands now intelligently fallback to current directory when no git-scout configuration is found
+- Interactive prompts are automatically skipped in non-interactive environments
+- Better error messages guiding users to run `git-scout init` when appropriate
+
+## [0.0.2] - 2025-09-30
 
 ### Added
 
@@ -25,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `git-scout init`: Auto-discover and configure Git repositories with interactive selection
 
-## [1.0.0] - 2025-09-30
+## [0.0.1] - 2025-09-30
 
 ### Added
 
