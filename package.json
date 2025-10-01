@@ -1,7 +1,7 @@
 {
   "name": "git-scout",
   "version": "0.0.3",
-  "description": "A CLI tool for managing and analyzing multiple Git repositories with advanced statistics",
+  "description": "Powerful CLI for analyzing multiple Git repositories — statistics, insights & productivity tools for developers.",
   "main": "dist/index.js",
   "bin": {
     "git-scout": "./dist/index.js"
@@ -20,14 +20,15 @@
   "keywords": [
     "git",
     "cli",
-    "repository",
-    "statistics",
+    "command-line",
     "multi-repo",
-    "macos",
-    "analytics",
+    "git-analytics",
+    "git-statistics",
     "developer-tools",
-    "git-analysis",
-    "typescript"
+    "productivity",
+    "typescript",
+    "nodejs",
+    "terminal"
   ],
   "author": "malcohelper",
   "license": "MIT",
