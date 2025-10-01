@@ -1,59 +1,156 @@
 # Git Scout Action - Usage Guide
 
-## 🎯 Hybrid Approach: Smart Token Management
+## 🎯 Overview
 
-Git Scout Action uses a **Hybrid Approach** for token management:
-- ✅ **Auto-injection** - Token automatically provided by GitHub when available
-- ✅ **Smart validation** - Clear errors when token is needed but missing
-- ✅ **Flexible** - Works with or without token depending on use case
-- ✅ **Fail-safe** - Never silent failures
+Git Scout Action automates repository analytics and sends formatted reports to Slack. Perfect for weekly team updates, monthly retrospectives, or on-demand analysis.
 
-## 📋 When Do You Need a Token?
+## 📋 When to Use This Action
 
-| Use Case | Token Required | Reason |
-|----------|----------------|--------|
-| Post PR comments | ✅ Yes | Need GitHub API to create/update comments |
-| Create issues | ✅ Yes | Need GitHub API to create issues |
-| Local analysis only | ❌ No | Only reading local git history |
-| Export JSON | ❌ No | No GitHub API interaction |
-| Quality gate (display only) | ❌ No | Can calculate without posting |
-| Quality gate (post results) | ✅ Yes | Need to post results to PR |
+| Use Case | Description |
+|----------|-------------|
+| Weekly Team Reports | Scheduled analytics sent to Slack every week |
+| Monthly Summaries | Comprehensive monthly activity reports |
+| On-Demand Analysis | Trigger manual analysis via workflow_dispatch |
+| Multi-Repository Tracking | Analyze any Git repository automatically |
 
-## 🚀 Usage Examples
+## 🚀 Quick Start
 
-### Example 1: Full Featured (With Token)
-
-**Use Case**: Post PR comments with quality gates
+### Basic Weekly Report
 
 ```yaml
-name: PR Analytics
-on: [pull_request]
-
-permissions:
-  contents: read
-  pull-requests: write  # Required!
+name: Weekly Analytics
+on:
+  schedule:
+    - cron: '0 9 * * MON'  # Every Monday at 9 AM
 
 jobs:
-  analyze:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Important: Get full history
+      
+      - uses: malcohelper/git-scout/.github/actions/git-scout@main
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+```
+
+## 🎯 Configuration Options
+
+### Required Inputs
+
+| Input | Description | Example |
+|-------|-------------|---------|
+| `slack-webhook-url` | Slack webhook URL for sending reports | `${{ secrets.SLACK_WEBHOOK_URL }}` |
+
+### Optional Inputs
+
+| Input | Description | Default |
+|-------|-------------|---------|
+| `slack-channel` | Override webhook's default channel | (webhook default) |
+| `slack-username` | Bot username in Slack | `Git Scout Bot` |
+| `report-title` | Title for the report | `Weekly Analytics Report` |
+| `send-to-slack` | Enable/disable Slack sending | `true` |
+
+## 📝 Complete Examples
+
+### Example 1: Weekly Team Report
+
+**Use Case**: Send team activity report every Monday morning
+
+```yaml
+name: Weekly Team Report
+on:
+  schedule:
+    - cron: '0 9 * * MON'  # 9 AM every Monday
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  weekly-report:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       
-      - uses: malcohelper/git-scout-action@v1
+      - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}  # Auto-provided
-          post-comment: true
-          quality-gate: true
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack-channel: 'team-updates'
+          slack-username: 'Git Scout Bot'
+          report-title: 'Weekly Team Activity'
 ```
 
-### Example 2: Local Analysis (No Token)
+### Example 2: Monthly Summary
 
-**Use Case**: Analyze without posting to PR
+**Use Case**: Comprehensive monthly report on the 1st of each month
 
 ```yaml
-name: Local Analysis
+name: Monthly Summary
+on:
+  schedule:
+    - cron: '0 10 1 * *'  # 10 AM on 1st of each month
+
+jobs:
+  monthly-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: malcohelper/git-scout/.github/actions/git-scout@main
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack-channel: 'monthly-reports'
+          report-title: 'Monthly Activity Summary'
+```
+
+### Example 3: Multi-Channel Reports
+
+**Use Case**: Send different reports to different channels
+
+```yaml
+name: Multi-Channel Reports
+on:
+  schedule:
+    - cron: '0 9 * * MON'
+
+jobs:
+  dev-team-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: malcohelper/git-scout/.github/actions/git-scout@main
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_DEV }}
+          slack-channel: 'dev-team'
+          report-title: 'Dev Team Weekly'
+
+  management-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: malcohelper/git-scout/.github/actions/git-scout@main
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_MGMT }}
+          slack-channel: 'management'
+          report-title: 'Weekly Executive Summary'
+```
+
+### Example 4: Analysis Only (No Slack)
+
+**Use Case**: Run analysis without sending to Slack
+
+```yaml
+name: Analysis Only
 on: [push]
 
 jobs:
@@ -64,251 +161,271 @@ jobs:
         with:
           fetch-depth: 0
       
-      - uses: malcohelper/git-scout-action@v1
+      - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
-          # No token needed
-          command: 'stats --since 30d'
-          post-comment: false
+          slack-webhook-url: 'https://dummy.url'
+          send-to-slack: false
 ```
 
-### Example 3: Strict Quality Gate
+## 📊 Report Format
 
-**Use Case**: Block PRs that don't meet quality standards
+### Slack Message Structure
+
+The action sends a beautifully formatted Slack message with:
+
+**Header Section**
+- 📊 Report title
+- Repository name
+- Timestamp
+
+**Key Metrics Section**
+- Total commits
+- Files changed
+- Active contributors
+- Lines added/deleted
+
+**Top Contributors Section**
+- Top 3 contributors by commit count
+- Commit counts for each
+
+**Action Link**
+- Link to the GitHub Actions run
+
+### Example Output
+
+```
+📊 Weekly Analytics Report
+
+Repository: your-org/your-repo
+Date: 2025-10-01 09:00 UTC
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Key Metrics
+
+Commits            19
+Files Changed      23
+Contributors       3
+Lines Changed      +473 / -300
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+👥 Top Contributors
+
+• Alice: 12 commits
+• Bob: 5 commits  
+• Charlie: 2 commits
+
+View Full Report
+```
+
+## 🔧 Setup Guide
+
+### Step 1: Create Slack Webhook
+
+1. Go to https://api.slack.com/messaging/webhooks
+2. Create a new webhook for your workspace
+3. Choose the default channel
+4. Copy the webhook URL
+
+### Step 2: Add Secret to GitHub
+
+1. Go to your repository Settings
+2. Navigate to Secrets and variables → Actions
+3. Click "New repository secret"
+4. Name: `SLACK_WEBHOOK_URL`
+5. Value: Your webhook URL
+6. Click "Add secret"
+
+### Step 3: Create Workflow File
+
+Create `.github/workflows/weekly-report.yml`:
 
 ```yaml
-name: Quality Gate
-on: [pull_request]
-
-permissions:
-  contents: read
-  pull-requests: write
+name: Weekly Analytics
+on:
+  schedule:
+    - cron: '0 9 * * MON'
+  workflow_dispatch:
 
 jobs:
-  quality:
+  report:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       
-      - uses: malcohelper/git-scout-action@v1
+      - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          quality-gate: true
-          quality-threshold: 80
-          fail-on-quality: true  # Block if < 80
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
-### Example 4: Export Data Only
+### Step 4: Test It
 
-**Use Case**: Export JSON for external processing
+1. Go to Actions tab in your repository
+2. Select "Weekly Analytics" workflow
+3. Click "Run workflow"
+4. Check your Slack channel!
 
+## ⚠️ Troubleshooting
+
+### Error: Analysis failed with exit code: 1
+
+**Possible Causes:**
+- No git history (missing `fetch-depth: 0`)
+- No commits in the last 7 days
+- Repository not properly checked out
+
+**Solution:**
 ```yaml
-name: Export Analytics
-on: [push]
-
-jobs:
-  export:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - uses: malcohelper/git-scout-action@v1
-        id: scout
-        with:
-          command: 'stats --since 7d --json'
-          post-comment: false
-      
-      - name: Send to External System
-        run: |
-          echo '${{ steps.scout.outputs.stats-json }}' | curl -X POST https://api.example.com/analytics
+- uses: actions/checkout@v4
+  with:
+    fetch-depth: 0  # This is required!
 ```
 
-## ⚠️ Common Errors & Solutions
+### Error: Failed to send to Slack
 
-### Error 1: Token Required
+**Possible Causes:**
+- Invalid webhook URL
+- Webhook was revoked or expired
+- Network issues
 
-```
-❌ Configuration Error
-You enabled post-comment but no GitHub token was provided.
-```
+**Solution:**
+- Verify webhook URL in Slack settings
+- Regenerate webhook if needed
+- Update `SLACK_WEBHOOK_URL` secret
 
-**Solution**:
-```yaml
-# Add token
-with:
-  github-token: ${{ secrets.GITHUB_TOKEN }}
-```
+### Warning: No configuration found
 
-Or:
-```yaml
-# Disable comments
-with:
-  post-comment: false
-```
+**Not actually an error!** The action auto-creates configuration. If you see this with successful analysis, everything is working correctly.
 
-### Error 2: Permission Denied
+### Error: Configuration Error - No webhook URL
 
-```
-Error: Resource not accessible by integration
-```
+**Cause:** Slack webhook URL not provided
 
-**Solution**: Add permissions to workflow
-
-```yaml
-permissions:
-  contents: read
-  pull-requests: write  # This is required!
-```
-
-### Error 3: Token Not Auto-Injected
-
-```
-ℹ️ Running in local-only mode (no GitHub API access)
-```
-
-**Solution**: Explicitly provide token
-
+**Solution:**
 ```yaml
 with:
-  github-token: ${{ secrets.GITHUB_TOKEN }}
+  slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
-
-## 🔧 Configuration Matrix
-
-| Configuration | Token | post-comment | quality-gate | Result |
-|---------------|-------|--------------|--------------|--------|
-| **Full Featured** | ✅ | true | true | Posts to PR with quality gate |
-| **Read-only** | ✅ | false | true | Quality check, no posting |
-| **Local Analysis** | ❌ | false | false | Local git analysis only |
-| **Invalid** | ❌ | true | - | ❌ Error: token required |
 
 ## 💡 Best Practices
 
-### 1. **Always Use Fetch Depth 0**
+### 1. Always Use Full Git History
 
 ```yaml
 - uses: actions/checkout@v4
   with:
-    fetch-depth: 0  # Critical for accurate analysis!
+    fetch-depth: 0  # Critical!
 ```
 
-Without full history, analysis will be incomplete.
+Without full history, analysis will be limited.
 
-### 2. **Set Appropriate Permissions**
+### 2. Use Meaningful Report Titles
 
 ```yaml
-permissions:
-  contents: read
-  pull-requests: write  # Only if posting comments
+with:
+  report-title: 'Frontend Team - Weekly Activity'
 ```
 
-### 3. **Use Quality Gates Wisely**
+Helps distinguish multiple reports.
+
+### 3. Schedule During Work Hours
 
 ```yaml
-# Warning mode (recommended for new projects)
-quality-gate: true
-fail-on-quality: false
-
-# Strict mode (for mature projects)
-quality-gate: true
-fail-on-quality: true
-quality-threshold: 80
+on:
+  schedule:
+    - cron: '0 9 * * MON'  # 9 AM Monday (UTC)
 ```
 
-### 4. **Handle Failures Gracefully**
+Adjust for your timezone.
+
+### 4. Enable Manual Triggers
 
 ```yaml
-- uses: malcohelper/git-scout-action@v1
-  continue-on-error: true  # Don't block entire workflow
-  with:
-    fail-on-quality: false
+on:
+  schedule:
+    - cron: '0 9 * * MON'
+  workflow_dispatch:  # Allows manual runs
 ```
+
+Useful for testing and on-demand reports.
+
+### 5. Use Specific Channels
+
+```yaml
+with:
+  slack-channel: 'team-updates'  # Override default
+```
+
+Send to specific channels as needed.
 
 ## 🎓 Advanced Patterns
 
-### Pattern 1: Multi-Stage Quality Checks
+### Pattern 1: Different Schedules
 
 ```yaml
-jobs:
-  quick-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - name: Quick Check
-        uses: malcohelper/git-scout-action@v1
-        with:
-          command: 'today --json'
-          quality-threshold: 60  # Lower threshold for quick check
-          fail-on-quality: true
-  
-  deep-analysis:
-    needs: quick-check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - name: Deep Analysis
-        uses: malcohelper/git-scout-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          command: 'stats --since 30d'
-          post-comment: true
+on:
+  schedule:
+    - cron: '0 9 * * MON'    # Weekly
+    - cron: '0 10 1 * *'     # Monthly (1st of month)
 ```
 
-### Pattern 2: Conditional Posting
+### Pattern 2: Conditional Sending
 
 ```yaml
-- uses: malcohelper/git-scout-action@v1
+- uses: malcohelper/git-scout/.github/actions/git-scout@main
+  if: github.ref == 'refs/heads/main'  # Only on main branch
   with:
-    github-token: ${{ secrets.GITHUB_TOKEN }}
-    post-comment: ${{ github.event_name == 'pull_request' }}
-    # Only post on PRs, not pushes
+    slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
-### Pattern 3: Custom Thresholds per Branch
+### Pattern 3: Multiple Repositories
 
-```yaml
-- uses: malcohelper/git-scout-action@v1
-  with:
-    github-token: ${{ secrets.GITHUB_TOKEN }}
-    quality-threshold: ${{ github.base_ref == 'main' && 80 || 70 }}
-    # Higher threshold for main branch
-```
+Set up the same workflow in multiple repos, all reporting to the same Slack channel for organization-wide visibility.
 
 ## 🔍 Debugging
 
-### Enable Verbose Logging
+### Enable Detailed Logs
 
-The action provides detailed logs by default. Check:
+The action provides comprehensive logs:
 
-1. **Configuration Validation** step
-2. **Analysis** step output
-3. **Quality Score Calculation** step
-4. **Summary** step (always runs)
+1. **Configuration Validation** - Check inputs
+2. **Config Setup** - Repository configuration
+3. **Analysis** - Git Scout execution
+4. **Slack Sending** - Message delivery
+5. **Summary** - Final status (always runs)
 
-### Check Token Availability
+Check each step's output in the Actions tab.
+
+### Test Webhook Manually
+
+```bash
+curl -X POST -H 'Content-type: application/json' \
+  --data '{"text":"Test message"}' \
+  YOUR_WEBHOOK_URL
+```
+
+### Verify Repository Access
 
 ```yaml
-- name: Debug Token
+- name: Test Git Access
   run: |
-    if [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
-      echo "Token is available"
-    else
-      echo "Token is NOT available"
-    fi
+    git log --since="7 days ago" --oneline
+    git log --stat --since="7 days ago"
 ```
 
 ## 📞 Support
 
-- 📖 [Full Documentation](https://github.com/malcohelper/git-scout)
+- 📖 [Git Scout Documentation](https://github.com/malcohelper/git-scout)
 - 🐛 [Report Issues](https://github.com/malcohelper/git-scout/issues)
 - 💬 [Discussions](https://github.com/malcohelper/git-scout/discussions)
 - 🗺️ [Roadmap](https://github.com/malcohelper/git-scout/blob/main/ROADMAP.md)
+
+## 🚀 What's Next?
+
+See our [Roadmap](https://github.com/malcohelper/git-scout/blob/main/ROADMAP.md) for upcoming features:
+
+- GitLab CI/CD integration
+- Multiple messaging platforms (Discord, Teams)
+- Custom report templates
+- Advanced analytics and trends

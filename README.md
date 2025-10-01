@@ -156,61 +156,68 @@ See Git Scout in action with these beautiful terminal interfaces:
 
 ### GitHub Actions
 
-Automate your repository analytics with our GitHub Action! Get instant insights on every PR.
+Automate your repository analytics with our GitHub Action! Get weekly reports sent directly to Slack.
 
 #### Quick Setup
 
 ```yaml
-# .github/workflows/pr-analytics.yml
-name: PR Analytics
-on: [pull_request]
-
-permissions:
-  pull-requests: write
+# .github/workflows/weekly-report.yml
+name: Weekly Analytics Report
+on:
+  schedule:
+    - cron: '0 9 * * MON'  # Every Monday at 9 AM
+  workflow_dispatch:
 
 jobs:
-  analyze:
+  weekly-report:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       
-      - uses: malcohelper/git-scout-action@v1
+      - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          post-comment: true
-          quality-gate: true
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack-channel: 'team-updates'
+          slack-username: 'Git Scout Bot'
+          report-title: 'Weekly Analytics Report'
 ```
 
 #### Features
 
-- 🤖 **Automated PR Comments** - Post analytics directly to pull requests
-- ✅ **Quality Gates** - Block PRs that don't meet standards
-- 📊 **JSON Export** - Integrate with external systems
-- ⏰ **Scheduled Reports** - Weekly/monthly automated reports
-- 🎯 **Smart Token Management** - Auto-injection with clear validation
+- 📤 **Slack Integration** - Automated reports sent directly to Slack channels
+- 📊 **Detailed Metrics** - Commits, files changed, contributors, and line changes
+- ⏰ **Scheduled Reports** - Weekly/monthly automated analytics
+- 🎨 **Formatted Messages** - Beautiful Slack Block Kit formatting
+- 🔧 **Zero Configuration** - Auto-creates config, works out of the box
+- 🛡️ **Error Handling** - Clear troubleshooting tips when issues occur
 
-#### Example Output
+#### Example Slack Report
 
-When a PR is opened, Git Scout automatically posts:
+Git Scout automatically posts formatted reports to your Slack channel:
 
-```markdown
-## 🔍 Git Scout Analysis
+```
+📊 Weekly Analytics Report
 
-**Quality Score**: 85/100 ✅
+Repository: your-org/your-repo
+Date: 2025-10-01 09:00 UTC
 
-### 📊 Repository Statistics
-| Metric | Value |
-|--------|-------|
-| Total Commits | 45 |
-| Files Changed | 23 |
-| Lines Added | +1,234 |
-| Active Authors | 5 |
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Key Metrics
 
-### 👥 Top Contributors
-- Alice: 20 commits, 15 files
-- Bob: 15 commits, 10 files
+Commits          Files Changed
+19               23
+
+Contributors     Lines Changed
+3                +473 / -300
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+👥 Top Contributors
+
+• Alice: 12 commits
+• Bob: 5 commits
+• Charlie: 2 commits
 ```
 
 📖 **[View Full Documentation →](.github/actions/git-scout/README.md)**
