@@ -48,14 +48,11 @@ git-scout today
 
 ## 📦 Installation
 
+**Using npm:**
+
 ```bash
 npm install -g git-scout
 ```
-
-That's all! Now run `git-scout init` to get started.
-
-<details>
-<summary>📖 Alternative Installation Methods</summary>
 
 **Using Yarn:**
 
@@ -63,7 +60,10 @@ That's all! Now run `git-scout init` to get started.
 yarn global add git-scout
 ```
 
-**From Source (for contributors):**
+That's all! Now run `git-scout init` to get started.
+
+<details>
+<summary>📖 Install from Source (for contributors)</summary>
 
 ```bash
 git clone https://github.com/malcohelper/git-scout.git
