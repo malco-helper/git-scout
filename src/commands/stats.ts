@@ -19,7 +19,8 @@ export class StatsCommand {
   public static async execute(options: StatsOptions = {}): Promise<void> {
     try {
       // Check if we're in a non-interactive environment (CI/GitHub Actions)
-      const isNonInteractive = !process.stdin.isTTY;
+      // Also treat JSON mode as non-interactive since we can't show prompts
+      const isNonInteractive = !process.stdin.isTTY || options.json === true;
 
       let project: { name: string; path: string };
       let configManager: ConfigManager | null = null;
