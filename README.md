@@ -1,90 +1,66 @@
 # 🔍 Git Scout
 
-A powerful CLI tool for managing and analyzing multiple Git repositories with advanced statistics and beautiful visualizations.
+**Beautiful Git analytics for developers** - Track your repositories, analyze activity, and automate reports to Slack.
+
+## ⚡ Quick Start - Just 3 Steps!
+
+```bash
+# Step 1: Install
+npm install -g git-scout
+
+# Step 2: Configure (auto-discovers your repos)
+git-scout init
+
+# Step 3: Analyze!
+git-scout today
+```
+
+**That's it!** You're now tracking your Git activity with beautiful analytics.
+
+## 🎯 What Can You Do?
+
+### Basic Commands (Start Here)
+- `git-scout today` - See today's commits and changes
+- `git-scout stats --since 7d` - Weekly team statistics
+- `git-scout branches` - Explore your branches
+
+### Advanced Features
+- 📊 **Multi-Repository Management** - Track multiple projects
+- 📈 **Custom Reports** - Filter by author, branch, date range
+- 📤 **JSON Export** - Integrate with your tools
+- 🤖 **CI/CD Integration** - Automated Slack reports via GitHub Actions
 
 ## ✨ Key Features
 
-- 🆕 **Auto-Discovery**: Automatically find and configure Git repositories with `git-scout init`
-- 📊 **Multi-Repository Management**: Track multiple Git projects from a single interface
-- 🌿 **Interactive Branch Explorer**: Browse branches with detailed commit information
-- 📈 **Today's Activity Dashboard**: Get instant insights into daily development activity
-- 📋 **Comprehensive Statistics**: Generate detailed reports with author and file-level analytics
-- 🎨 **Beautiful Tables & Colors**: ASCII tables with syntax highlighting and intuitive color coding
-- 📅 **Flexible Date Parsing**: Support for relative dates (7d, today, yesterday) and absolute dates
-- 📤 **JSON Export**: All commands support JSON output for integration with other tools
-- 🍎 **macOS Optimized**: Built specifically for macOS with proper timezone handling and safe scanning
-- 🛡️ **Privacy-Focused**: Avoids sensitive directories (Photos, Music, etc.) - no permission requests
+- ⚡ **Zero Config** - Auto-discovers repos with `git-scout init`
+- 🎨 **Beautiful Output** - Color-coded tables and insights
+- 📅 **Smart Dates** - Use "7d", "today", or "2025-09-01"
+- 🛡️ **Privacy First** - Only scans project folders (no Photos/Music)
+- 🍎 **macOS Native** - Optimized for Mac developers
 
-## ⚡ Quick Start (30 seconds)
+## 📦 Installation
 
 ```bash
-# 1. Install globally
 npm install -g git-scout
-
-# 2. Auto-configure your repositories
-git-scout init
-
-# 3. Start analyzing!
-git-scout today
 ```
 
-## 🚀 Installation & Setup
+That's all! Now run `git-scout init` to get started.
 
-### Step 1: Install Git Scout
+<details>
+<summary>📖 Alternative Installation Methods</summary>
 
-**🎯 Recommended: Install from NPM (Easiest)**
-
+**Using Yarn:**
 ```bash
-# Install globally with npm
-npm install -g git-scout
-
-# Or install globally with yarn
 yarn global add git-scout
 ```
 
-**🔧 Development: Clone from GitHub**
-
+**From Source (for contributors):**
 ```bash
-# Clone the repository
-git clone https://github.com/malco-helper/git-scout.git
+git clone https://github.com/malcohelper/git-scout.git
 cd git-scout
-
-# Auto-install everything
 ./scripts/setup.sh
 ```
-
-**Or manual installation:**
-
-```bash
-npm install && npm run build && npm link
-```
-
-### Step 2: Auto-Configure Your Repositories 🆕
-
-```bash
-# 🎯 ONE COMMAND TO RULE THEM ALL
-git-scout init
-```
-
-**What this does:**
-
-- 🔍 Automatically scans for Git repositories in safe directories
-- 📝 Extracts project descriptions from package.json/README files
-- ⚡ Creates configuration instantly - no manual setup needed
-- 🛡️ Respects macOS privacy - no permission requests for Photos/Music/etc.
-
-### Step 3: Start Analyzing!
-
-```bash
-# View today's activity
-git-scout today
-
-# Explore branches
-git-scout branches
-
-# Generate weekly statistics
-git-scout stats --since 7d
-```
+</details>
 
 ## 📸 Demo Gallery
 
@@ -226,285 +202,110 @@ Contributors     Lines Changed
 
 ## 🎯 Core Commands
 
-### `git-scout init` - Auto Setup 🆕
-
-**The easiest way to get started!**
+### Essential Commands (Daily Use)
 
 ```bash
-git-scout init                           # Auto-discover repositories
-git-scout init --scan-path ~/MyProjects # Scan specific directory
-git-scout init --global                 # Force global configuration
-```
-
-**Safe Scanning:**
-
-- ✅ Scans: `~/Projects`, `~/Dev`, `~/Code`, `~/GitHub`, `~/Documents/Projects`
-- ❌ Avoids: Photos, Music, Movies, System directories (no permission requests!)
-
-### `git-scout today` - Daily Activity
-
-```bash
-git-scout today                          # Today's activity
-git-scout today --author alice           # Filter by author
-git-scout today --branch main            # Filter by branch
-```
-
-### `git-scout stats` - Comprehensive Analytics
-
-```bash
-git-scout stats --since 7d               # Weekly statistics
-git-scout stats --since "2025-09-01"     # Since specific date
-git-scout stats --author alice --json    # JSON output for specific author
-```
-
-### `git-scout branches` - Branch Explorer
-
-```bash
-git-scout branches                       # Interactive branch explorer
-git-scout branches --project "My App"    # Specific project
-git-scout branches --since 30d          # Show recent activity
-```
-
-### `git-scout projects` - Project Management
-
-```bash
-git-scout projects                       # List and select projects
-git-scout projects --json               # JSON output
-```
-
-## 📊 Sample Output
-
-### Author Statistics
-
-```
-┌─────────────────────────┬─────────┬───────┬────────┬────────┐
-│ AUTHOR                  │ COMMITS │ FILES │ +LINES │ -LINES │
-├─────────────────────────┼─────────┼───────┼────────┼────────┤
-│ John Doe                │ 15      │ 23    │ +487   │ -123   │
-│ Jane Smith              │ 8       │ 12    │ +234   │ -67    │
-└─────────────────────────┴─────────┴───────┴────────┴────────┘
-```
-
-### Branch Information
-
-```
-🌿 Branch: develop
-
-Latest commit: a1b2c3d
-Author: John Doe
-Date: 09/30/2025 14:30
-Message: Add user authentication feature
-Recent commits: 12
-```
-
-## 📅 Flexible Date Formats
-
-Git Scout supports natural date expressions:
-
-- **Relative**: `today`, `yesterday`, `7d`, `30d`
-- **Specific**: `today 09:00`, `2025-09-29`
-- **ISO Format**: `2025-09-29T10:00:00`
-
-## ⚙️ Configuration
-
-### Automatic (Recommended)
-
-```bash
-git-scout init  # One command setup!
-```
-
-### Manual Configuration
-
-Create `~/.git-scout/config.json`:
-
-```json
-{
-  "projects": [
-    {
-      "name": "My App",
-      "path": "/Users/yourname/Dev/my-app"
-    }
-  ],
-  "defaultSinceDays": 1
-}
-```
-
-## 🔧 Advanced Usage
-
-### JSON Integration
-
-```bash
-# Export data for other tools
-git-scout stats --since 7d --json > weekly-report.json
-git-scout today --json | jq '.stats.totalCommits'
-```
-
-### Filtering & Analysis
-
-```bash
-# Team productivity analysis
-git-scout stats --since 30d --author "team@company.com"
-
-# Branch comparison
-git-scout branches --project "Backend" --since 7d
-
-# File change tracking
-git-scout stats --since 7d --limit 50
-```
-
-### Multiple Projects Workflow
-
-```bash
-# 1. Configure multiple projects
-git-scout init
-
-# 2. Select projects interactively
-git-scout projects
-
-# 3. Analyze across selected projects
+# Today's activity
 git-scout today
+
+# Weekly statistics
+git-scout stats --since 7d
+
+# Explore branches
+git-scout branches
 ```
+
+### Advanced Usage
+
+<details>
+<summary>📘 Complete Command Reference</summary>
+
+**Init & Configuration:**
+```bash
+git-scout init                           # Auto-discover repos
+git-scout init --scan-path ~/MyProjects # Custom scan path
+git-scout projects                       # Manage projects
+```
+
+**Filtering & Analysis:**
+```bash
+git-scout today --author alice           # Filter by author
+git-scout stats --since "2025-09-01"     # Custom date range
+git-scout branches --project "My App"    # Specific project
+```
+
+**Export & Integration:**
+```bash
+git-scout stats --json                   # JSON output
+git-scout today --json | jq              # Pipe to jq
+```
+
+**Date Formats:**
+- Relative: `7d`, `30d`, `today`, `yesterday`
+- Absolute: `2025-09-01`
+- With time: `today 09:00`
+
+</details>
+
+## 🌟 What's Next?
+
+### 🚀 Current: CLI Analytics (✅ Complete)
+You're using it now! Beautiful terminal analytics with zero config.
+
+### 🔄 Phase 1: CI/CD Integration (In Progress)
+- ✅ **GitHub Actions** - Automated Slack reports (Available now!)
+- 🔜 **GitLab CI/CD** - MR analytics and pipeline tracking
+- 🔜 **Docker Image** - Universal CI/CD integration
+
+### 📊 Phase 2-3: Advanced Features (Planned)
+- **GitHub/GitLab API** - Organization-wide analytics
+- **Web Dashboard** - Interactive visualizations
+- **PR/Issue Analytics** - Track review cycles and resolution times
+- **Predictive Analytics** - Forecast delivery times
+
+📖 **[View Full Roadmap →](ROADMAP.md)**
 
 ## 🐛 Troubleshooting
 
-### Command not found
+<details>
+<summary>Common Issues & Solutions</summary>
 
+**Command not found:**
 ```bash
 npm link  # Re-link the package
 ```
 
-### No repositories found
-
+**No repositories found:**
 ```bash
-git-scout init --scan-path ~/your-dev-folder  # Custom scan path
+git-scout init --scan-path ~/your-dev-folder
 ```
 
-### Permission issues
-
+**Reset configuration:**
 ```bash
-chmod +x scripts/setup.sh  # Make setup script executable
+rm ~/.git-scout/config.json && git-scout init
 ```
 
-### Config issues
-
+**Uninstall:**
 ```bash
-rm ~/.git-scout/config.json && git-scout init  # Reset and reconfigure
-```
-
-## 🗑️ Uninstallation
-
-**If installed via NPM/Yarn:**
-
-```bash
-# Remove global command (npm)
 npm uninstall -g git-scout
-
-# Remove global command (yarn)
-yarn global remove git-scout
+rm -rf ~/.git-scout  # Remove config (optional)
 ```
 
-**If installed from source:**
-
-```bash
-# Remove global command
-npm unlink -g git-scout
-
-# Remove source code
-rm -rf /path/to/git-scout
-```
-
-**Remove configuration (optional):**
-
-```bash
-# Remove configuration files
-rm -rf ~/.git-scout
-```
-
-## 🧪 Development & Testing
-
-### Prerequisites
-
-- Node.js >= 16.0.0
-- Git
-- macOS (primary target)
-
-### Development Setup
-
-```bash
-git clone <repository-url>
-cd git-scout
-npm install
-npm run dev -- --help    # Development mode
-npm test                 # Run tests
-npm run build            # Production build
-```
-
-### Architecture
-
-```
-src/
-├── commands/           # CLI commands (init, projects, branches, today, stats)
-├── git/               # Git integration and parsing
-├── ui/                # Table rendering and formatting
-├── utils/             # Date parsing and utilities
-├── config.ts          # Configuration management
-├── types.ts           # TypeScript definitions
-└── index.ts           # Main CLI entry point
-```
+</details>
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## 🌟 Roadmap
-
-See our detailed [ROADMAP.md](ROADMAP.md) for the complete development plan.
-
-### Highlights:
-
-#### 🔥 Phase 1: CI/CD Integration (Priority)
-
-- [x] **GitHub Actions Integration** - ✅ Completed! Slack reports, auto-config, scheduled analytics
-- [ ] **GitLab CI/CD Integration** - MR comments and pipeline analytics
-- [ ] **Jenkins Plugin** - Legacy CI/CD support
-- [ ] **Docker Image** - Universal CI/CD integration
-
-#### 🌐 Phase 2-3: API Integration
-
-- [ ] **GitHub API Integration** - Organization-wide analytics, PR/Issue tracking, Security alerts
-- [ ] **GitLab API Integration** - Group-wide analytics, MR/Issue tracking, Pipeline analytics
-
-#### 📊 Phase 4-6: Advanced Features
-
-- [ ] **Commit Message Analysis** - Pattern detection and quality scoring
-- [ ] **Team Productivity Metrics** - Cross-team comparison and trends
-- [ ] **Web Dashboard** - Interactive analytics and visualization
-- [ ] **CSV/Excel Export** - Data export and custom integrations
-- [ ] **Real-time Monitoring** - Live activity tracking
-- [ ] **Custom Report Templates** - Configurable report generation
-
-**📖 [View Full Roadmap →](ROADMAP.md)**
+We welcome contributions! Check out:
+- 📖 [Development Guide](ROADMAP.md)
+- 🐛 [Issues](https://github.com/malcohelper/git-scout/issues)
+- 💬 [Discussions](https://github.com/malcohelper/git-scout/discussions)
 
 ## 📝 License
 
-MIT License - see LICENSE file for details.
-
----
-
-## 💡 Pro Tips
-
-1. **Start with `git-scout init`** - it's the fastest way to get up and running
-2. **Use `--json` flag** for integrating with other tools and scripts
-3. **Combine filters** for precise analysis: `--author alice --branch main --since 7d`
-4. **Regular analysis** helps track team productivity and code quality trends
-5. **Safe scanning** means no macOS permission popups - scan worry-free!
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
 **Made with ❤️ for developers who love beautiful, insightful Git analytics.**
 
-**🚀 Get started in 30 seconds: `git-scout init`**
+**🚀 Get started now:** `npm install -g git-scout && git-scout init`
