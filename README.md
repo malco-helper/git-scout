@@ -20,11 +20,13 @@ git-scout today
 ## 🎯 What Can You Do?
 
 ### Basic Commands (Start Here)
+
 - `git-scout today` - See today's commits and changes
 - `git-scout stats --since 7d` - Weekly team statistics
 - `git-scout branches` - Explore your branches
 
 ### Advanced Features
+
 - 📊 **Multi-Repository Management** - Track multiple projects
 - 📈 **Custom Reports** - Filter by author, branch, date range
 - 📤 **JSON Export** - Integrate with your tools
@@ -50,16 +52,19 @@ That's all! Now run `git-scout init` to get started.
 <summary>📖 Alternative Installation Methods</summary>
 
 **Using Yarn:**
+
 ```bash
 yarn global add git-scout
 ```
 
 **From Source (for contributors):**
+
 ```bash
 git clone https://github.com/malcohelper/git-scout.git
 cd git-scout
 ./scripts/setup.sh
 ```
+
 </details>
 
 ## 📸 Demo Gallery
@@ -221,6 +226,7 @@ git-scout branches
 <summary>📘 Complete Command Reference</summary>
 
 **Init & Configuration:**
+
 ```bash
 git-scout init                           # Auto-discover repos
 git-scout init --scan-path ~/MyProjects # Custom scan path
@@ -228,6 +234,7 @@ git-scout projects                       # Manage projects
 ```
 
 **Filtering & Analysis:**
+
 ```bash
 git-scout today --author alice           # Filter by author
 git-scout stats --since "2025-09-01"     # Custom date range
@@ -235,12 +242,14 @@ git-scout branches --project "My App"    # Specific project
 ```
 
 **Export & Integration:**
+
 ```bash
 git-scout stats --json                   # JSON output
 git-scout today --json | jq              # Pipe to jq
 ```
 
 **Date Formats:**
+
 - Relative: `7d`, `30d`, `today`, `yesterday`
 - Absolute: `2025-09-01`
 - With time: `today 09:00`
@@ -250,14 +259,17 @@ git-scout today --json | jq              # Pipe to jq
 ## 🌟 What's Next?
 
 ### 🚀 Current: CLI Analytics (✅ Complete)
+
 You're using it now! Beautiful terminal analytics with zero config.
 
 ### 🔄 Phase 1: CI/CD Integration (In Progress)
+
 - ✅ **GitHub Actions** - Automated Slack reports (Available now!)
 - 🔜 **GitLab CI/CD** - MR analytics and pipeline tracking
 - 🔜 **Docker Image** - Universal CI/CD integration
 
 ### 📊 Phase 2-3: Advanced Features (Planned)
+
 - **GitHub/GitLab API** - Organization-wide analytics
 - **Web Dashboard** - Interactive visualizations
 - **PR/Issue Analytics** - Track review cycles and resolution times
@@ -271,21 +283,25 @@ You're using it now! Beautiful terminal analytics with zero config.
 <summary>Common Issues & Solutions</summary>
 
 **Command not found:**
+
 ```bash
 npm link  # Re-link the package
 ```
 
 **No repositories found:**
+
 ```bash
 git-scout init --scan-path ~/your-dev-folder
 ```
 
 **Reset configuration:**
+
 ```bash
 rm ~/.git-scout/config.json && git-scout init
 ```
 
 **Uninstall:**
+
 ```bash
 npm uninstall -g git-scout
 rm -rf ~/.git-scout  # Remove config (optional)
@@ -296,6 +312,7 @@ rm -rf ~/.git-scout  # Remove config (optional)
 ## 🤝 Contributing
 
 We welcome contributions! Check out:
+
 - 📖 [Development Guide](ROADMAP.md)
 - 🐛 [Issues](https://github.com/malcohelper/git-scout/issues)
 - 💬 [Discussions](https://github.com/malcohelper/git-scout/discussions)

@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Top contributors section with commit counts
   - Links to GitHub Actions workflow run
 - **📦 Public npm Registry**: Published to npmjs.org for easier access
-- **📖 Comprehensive Documentation**: 
+- **📖 Comprehensive Documentation**:
   - Complete USAGE guide for GitHub Actions
   - Updated README with Slack integration examples
   - Updated ROADMAP with completed features

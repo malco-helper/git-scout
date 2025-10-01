@@ -6,12 +6,12 @@ Git Scout Action automates repository analytics and sends formatted reports to S
 
 ## 📋 When to Use This Action
 
-| Use Case | Description |
-|----------|-------------|
-| Weekly Team Reports | Scheduled analytics sent to Slack every week |
-| Monthly Summaries | Comprehensive monthly activity reports |
-| On-Demand Analysis | Trigger manual analysis via workflow_dispatch |
-| Multi-Repository Tracking | Analyze any Git repository automatically |
+| Use Case                  | Description                                   |
+| ------------------------- | --------------------------------------------- |
+| Weekly Team Reports       | Scheduled analytics sent to Slack every week  |
+| Monthly Summaries         | Comprehensive monthly activity reports        |
+| On-Demand Analysis        | Trigger manual analysis via workflow_dispatch |
+| Multi-Repository Tracking | Analyze any Git repository automatically      |
 
 ## 🚀 Quick Start
 
@@ -21,7 +21,7 @@ Git Scout Action automates repository analytics and sends formatted reports to S
 name: Weekly Analytics
 on:
   schedule:
-    - cron: '0 9 * * MON'  # Every Monday at 9 AM
+    - cron: "0 9 * * MON" # Every Monday at 9 AM
 
 jobs:
   report:
@@ -29,8 +29,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Important: Get full history
-      
+          fetch-depth: 0 # Important: Get full history
+
       - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -40,18 +40,18 @@ jobs:
 
 ### Required Inputs
 
-| Input | Description | Example |
-|-------|-------------|---------|
+| Input               | Description                           | Example                            |
+| ------------------- | ------------------------------------- | ---------------------------------- |
 | `slack-webhook-url` | Slack webhook URL for sending reports | `${{ secrets.SLACK_WEBHOOK_URL }}` |
 
 ### Optional Inputs
 
-| Input | Description | Default |
-|-------|-------------|---------|
-| `slack-channel` | Override webhook's default channel | (webhook default) |
-| `slack-username` | Bot username in Slack | `Git Scout Bot` |
-| `report-title` | Title for the report | `Weekly Analytics Report` |
-| `send-to-slack` | Enable/disable Slack sending | `true` |
+| Input            | Description                        | Default                   |
+| ---------------- | ---------------------------------- | ------------------------- |
+| `slack-channel`  | Override webhook's default channel | (webhook default)         |
+| `slack-username` | Bot username in Slack              | `Git Scout Bot`           |
+| `report-title`   | Title for the report               | `Weekly Analytics Report` |
+| `send-to-slack`  | Enable/disable Slack sending       | `true`                    |
 
 ## 📝 Complete Examples
 
@@ -63,8 +63,8 @@ jobs:
 name: Weekly Team Report
 on:
   schedule:
-    - cron: '0 9 * * MON'  # 9 AM every Monday
-  workflow_dispatch:  # Allow manual trigger
+    - cron: "0 9 * * MON" # 9 AM every Monday
+  workflow_dispatch: # Allow manual trigger
 
 jobs:
   weekly-report:
@@ -73,13 +73,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          slack-channel: 'team-updates'
-          slack-username: 'Git Scout Bot'
-          report-title: 'Weekly Team Activity'
+          slack-channel: "team-updates"
+          slack-username: "Git Scout Bot"
+          report-title: "Weekly Team Activity"
 ```
 
 ### Example 2: Monthly Summary
@@ -90,7 +90,7 @@ jobs:
 name: Monthly Summary
 on:
   schedule:
-    - cron: '0 10 1 * *'  # 10 AM on 1st of each month
+    - cron: "0 10 1 * *" # 10 AM on 1st of each month
 
 jobs:
   monthly-report:
@@ -99,12 +99,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          slack-channel: 'monthly-reports'
-          report-title: 'Monthly Activity Summary'
+          slack-channel: "monthly-reports"
+          report-title: "Monthly Activity Summary"
 ```
 
 ### Example 3: Multi-Channel Reports
@@ -115,7 +115,7 @@ jobs:
 name: Multi-Channel Reports
 on:
   schedule:
-    - cron: '0 9 * * MON'
+    - cron: "0 9 * * MON"
 
 jobs:
   dev-team-report:
@@ -124,12 +124,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_DEV }}
-          slack-channel: 'dev-team'
-          report-title: 'Dev Team Weekly'
+          slack-channel: "dev-team"
+          report-title: "Dev Team Weekly"
 
   management-report:
     runs-on: ubuntu-latest
@@ -137,12 +137,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_MGMT }}
-          slack-channel: 'management'
-          report-title: 'Weekly Executive Summary'
+          slack-channel: "management"
+          report-title: "Weekly Executive Summary"
 ```
 
 ### Example 4: Analysis Only (No Slack)
@@ -160,10 +160,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
-          slack-webhook-url: 'https://dummy.url'
+          slack-webhook-url: "https://dummy.url"
           send-to-slack: false
 ```
 
@@ -174,21 +174,25 @@ jobs:
 The action sends a beautifully formatted Slack message with:
 
 **Header Section**
+
 - 📊 Report title
 - Repository name
 - Timestamp
 
 **Key Metrics Section**
+
 - Total commits
 - Files changed
 - Active contributors
 - Lines added/deleted
 
 **Top Contributors Section**
+
 - Top 3 contributors by commit count
 - Commit counts for each
 
 **Action Link**
+
 - Link to the GitHub Actions run
 
 ### Example Output
@@ -211,7 +215,7 @@ Lines Changed      +473 / -300
 👥 Top Contributors
 
 • Alice: 12 commits
-• Bob: 5 commits  
+• Bob: 5 commits
 • Charlie: 2 commits
 
 View Full Report
@@ -243,7 +247,7 @@ Create `.github/workflows/weekly-report.yml`:
 name: Weekly Analytics
 on:
   schedule:
-    - cron: '0 9 * * MON'
+    - cron: "0 9 * * MON"
   workflow_dispatch:
 
 jobs:
@@ -253,7 +257,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - uses: malcohelper/git-scout/.github/actions/git-scout@main
         with:
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -271,25 +275,29 @@ jobs:
 ### Error: Analysis failed with exit code: 1
 
 **Possible Causes:**
+
 - No git history (missing `fetch-depth: 0`)
 - No commits in the last 7 days
 - Repository not properly checked out
 
 **Solution:**
+
 ```yaml
 - uses: actions/checkout@v4
   with:
-    fetch-depth: 0  # This is required!
+    fetch-depth: 0 # This is required!
 ```
 
 ### Error: Failed to send to Slack
 
 **Possible Causes:**
+
 - Invalid webhook URL
 - Webhook was revoked or expired
 - Network issues
 
 **Solution:**
+
 - Verify webhook URL in Slack settings
 - Regenerate webhook if needed
 - Update `SLACK_WEBHOOK_URL` secret
@@ -303,6 +311,7 @@ jobs:
 **Cause:** Slack webhook URL not provided
 
 **Solution:**
+
 ```yaml
 with:
   slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -315,7 +324,7 @@ with:
 ```yaml
 - uses: actions/checkout@v4
   with:
-    fetch-depth: 0  # Critical!
+    fetch-depth: 0 # Critical!
 ```
 
 Without full history, analysis will be limited.
@@ -324,7 +333,7 @@ Without full history, analysis will be limited.
 
 ```yaml
 with:
-  report-title: 'Frontend Team - Weekly Activity'
+  report-title: "Frontend Team - Weekly Activity"
 ```
 
 Helps distinguish multiple reports.
@@ -334,7 +343,7 @@ Helps distinguish multiple reports.
 ```yaml
 on:
   schedule:
-    - cron: '0 9 * * MON'  # 9 AM Monday (UTC)
+    - cron: "0 9 * * MON" # 9 AM Monday (UTC)
 ```
 
 Adjust for your timezone.
@@ -344,8 +353,8 @@ Adjust for your timezone.
 ```yaml
 on:
   schedule:
-    - cron: '0 9 * * MON'
-  workflow_dispatch:  # Allows manual runs
+    - cron: "0 9 * * MON"
+  workflow_dispatch: # Allows manual runs
 ```
 
 Useful for testing and on-demand reports.
@@ -354,7 +363,7 @@ Useful for testing and on-demand reports.
 
 ```yaml
 with:
-  slack-channel: 'team-updates'  # Override default
+  slack-channel: "team-updates" # Override default
 ```
 
 Send to specific channels as needed.
@@ -366,15 +375,15 @@ Send to specific channels as needed.
 ```yaml
 on:
   schedule:
-    - cron: '0 9 * * MON'    # Weekly
-    - cron: '0 10 1 * *'     # Monthly (1st of month)
+    - cron: "0 9 * * MON" # Weekly
+    - cron: "0 10 1 * *" # Monthly (1st of month)
 ```
 
 ### Pattern 2: Conditional Sending
 
 ```yaml
 - uses: malcohelper/git-scout/.github/actions/git-scout@main
-  if: github.ref == 'refs/heads/main'  # Only on main branch
+  if: github.ref == 'refs/heads/main' # Only on main branch
   with:
     slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
