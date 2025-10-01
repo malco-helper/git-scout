@@ -81,7 +81,7 @@ runs:
       shell: bash
       run: |
         echo "📦 Installing Git Scout..."
-        npm install -g @malcohelper/git-scout 2>/dev/null || npm install -g git-scout || {
+        npm install -g git-scout || {
           echo "❌ Failed to install Git Scout"
           echo "Trying alternative installation methods..."
           npm install -g git-scout@latest
@@ -95,10 +95,10 @@ runs:
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "⚙️  Setting up Git Scout Configuration"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        
+
         # Get repository name from directory
         REPO_NAME=$(basename "$GITHUB_WORKSPACE")
-        
+
         # Create a minimal config file for the current repository
         cat > "$GITHUB_WORKSPACE/git-scout.config.json" << EOF
         {
@@ -111,7 +111,7 @@ runs:
           "defaultSinceDays": 7
         }
         EOF
-        
+
         echo "✅ Created configuration for repository: $REPO_NAME"
         echo "   Path: $GITHUB_WORKSPACE"
         echo ""
