@@ -1,6 +1,6 @@
 {
   "name": "@malcohelper/git-scout",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A CLI tool for managing and analyzing multiple Git repositories with advanced statistics",
   "main": "dist/index.js",
   "bin": {
@@ -34,9 +34,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/malcohelper/git-scout.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   },
   "bugs": {
     "url": "https://github.com/malcohelper/git-scout/issues"
