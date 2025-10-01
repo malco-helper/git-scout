@@ -100,3 +100,4 @@ git-scout.config.json
 test-results/
 test-output/
 .npmrc
+.npmrc
