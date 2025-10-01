@@ -152,11 +152,10 @@ runs:
         # Build Slack message payload
         CHANNEL="${{ inputs.slack-channel }}"
         USERNAME="${{ inputs.slack-username }}"
-        
+
         # Create summary text for fallback
-        SUMMARY_TEXT="📊 ${REPORT_TITLE} for ${REPO_NAME}
-Commits: ${COMMITS} | Files: ${FILES} | Contributors: ${AUTHORS} | Lines: +${ADDITIONS}/-${DELETIONS}"
-        
+        SUMMARY_TEXT="📊 ${REPORT_TITLE} for ${REPO_NAME} - Commits: ${COMMITS} | Files: ${FILES} | Contributors: ${AUTHORS} | Lines: +${ADDITIONS}/-${DELETIONS}"
+
         # Start building JSON
         cat > /tmp/slack-payload.json << EOF
         {
