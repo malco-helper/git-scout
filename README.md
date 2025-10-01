@@ -1,5 +1,11 @@
 # 🔍 Git Scout
 
+[![npm version](https://img.shields.io/npm/v/git-scout.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/git-scout)
+[![npm downloads](https://img.shields.io/npm/dm/git-scout.svg?style=flat-square&color=green)](https://www.npmjs.com/package/git-scout)
+[![GitHub license](https://img.shields.io/github/license/malcohelper/git-scout.svg?style=flat-square&color=orange)](https://github.com/malcohelper/git-scout/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/malcohelper/git-scout.svg?style=flat-square&color=yellow)](https://github.com/malcohelper/git-scout/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/malcohelper/git-scout.svg?style=flat-square&color=red)](https://github.com/malcohelper/git-scout/issues)
+
 **Beautiful Git analytics for developers** - Track your repositories, analyze activity, and automate reports to Slack.
 
 ## ⚡ Quick Start - Just 3 Steps!
